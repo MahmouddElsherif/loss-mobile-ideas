@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss Mobile Ideas</title>
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --red: #e3000f; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  header { padding: 28px 16px 8px; max-width: 1200px; margin: auto; }
+  h1 { margin: 0 0 6px; font-size: 26px; }
+  header p { margin: 0; color: var(--muted); }
+  nav { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 16px; overflow-x: auto; white-space: nowrap; }
+  nav a { display: inline-block; margin-inline-end: 8px; padding: 4px 12px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); text-decoration: none; font-size: 13px; }
+  section { max-width: 1200px; margin: auto; padding: 24px 16px 8px; }
+  h2 { margin: 0 0 4px; font-size: 21px; }
+  h2 small { font-weight: 400; color: var(--muted); font-size: 14px; }
+  .note { color: var(--muted); margin: 0 0 14px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+  figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  figure img { display: block; width: 100%; height: auto; cursor: zoom-in; }
+  figcaption { padding: 10px 12px 12px; }
+  figcaption b { display: block; margin-bottom: 2px; }
+  figcaption span { color: var(--muted); font-size: 13.5px; }
+  .tag { display: inline-block; background: var(--red); color: #fff; border-radius: 6px; padding: 0 7px; font-size: 12px; margin-inline-start: 6px; vertical-align: middle; }
+  dialog { border: 0; padding: 0; background: transparent; max-width: 96vw; }
+  dialog::backdrop { background: rgba(0,0,0,.8); }
+  dialog img { max-height: 92vh; max-width: 96vw; display: block; border-radius: 10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>أفكار موبايل جديدة لـ Loss</h1>
+  <p>كل صورة من موقع حقيقي على الموبايل، والمربع الأحمر على الحاجة اللي ممكن ناخدها. اضغط على أي صورة تكبر.</p>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<dialog id="zoom"><img alt=""></dialog>
+<script>
+const S = [
+  { id: 'suggestions', title: 'الـ 15 اقتراح', note: 'كل اقتراح من اللي بعتهولك قبل كده، ومعاه مثال حقيقي من موقع.', items: [
+    ['suggestions/01a-story-button.jpg', '1. دواير ستوريز', 'زرار ستوري عليه حلقة ملونة (Bluorng). عندنا ممكن تبقى دواير فوق الهوم: New Drop، Handmade، Behind the stitch.'],
+    ['suggestions/01b-story-viewer.jpg', '1. شاشة الستوري', 'بتفتح full-screen زي إنستجرام، فوقها شرايط تقدم وتحتها Shop Now.'],
+    ['suggestions/02-wishlist-heart.jpg', '2. قلب Wishlist', 'قلب على كارت المنتج (Djerf Avenue). عندنا يتحفظ على الموبايل من غير app.'],
+    ['suggestions/03-size-advice.jpg', '3. نصيحة المقاس', 'سطر تحت المقاسات: "بيجي ضيق، خد مقاس أكبر" (Allbirds). ممكن يتطور لـ Size finder بالطول والوزن.'],
+    ['suggestions/04-low-stock-badge.jpg', '4. فاضل قطع قليلة', 'بادج "Final few" (Allbirds). عندنا: "فاضل 2 بس" لما المقاس المختار يقل.'],
+    ['suggestions/05-cart-free-shipping-bar-and-upsell.jpg', '5. كارت فيه شحن مجاني + مقترحات', 'شريط "فاضلك كام للشحن المجاني" وتحته "You may also like" (Scuffers). مستني أسعار الشحن من العميل.'],
+    ['suggestions/06-added-to-cart-feedback.jpg', '6. تأكيد الإضافة للكارت', 'بعد Add to cart بيطلع كارت صغير فوق البار ورقم الكارت بيتلون (Brain Dead). الأنيميشن نفسه مش باين في صورة.'],
+    ['suggestions/07-shop-the-look.jpg', '7. Shop the look', 'زرار على صورة اللوك بيفتح لستة القطع، وجنب كل قطعة Quick add (Pangaia).'],
+    ['suggestions/08-shoppable-vertical-videos.jpg', '8. فيديوهات طولية', 'فيديوهات زي تيك توك وتحت كل فيديو اسم المنتج وسعره (Offduty). مناسبة لفيديوهات الكروشيه.'],
+    ['suggestions/09-404-page-with-personality.jpg', '9. صفحة 404 فيها شخصية', '"مالقيناش الصفحة، خد صورة المدير التنفيذي بدالها" وهو كلب (Djerf Avenue). عندنا: "You\'re lost… it\'s their Loss".'],
+    ['suggestions/10-recently-viewed-row.jpg', '10. شفته قبل كده', 'صف Recently viewed في آخر صفحة المنتج (Gymshark).'],
+    ['suggestions/11-search-sheet-with-collection-photos.jpg', '11. بحث بصور', 'البحث بيطلع من تحت ومعاه الكولكشنز بصور قبل ما تكتب (Bluorng).'],
+    ['suggestions/12-fullscreen-gallery.jpg', '12. جاليري full-screen', 'تدوس على الصورة تفتح كل الصور full-screen وتنزل بالسهم (Lazy Oaf).'],
+    ['suggestions/13-notify-me-when-size-is-back.jpg', '13. ابعتلي لما يرجع', '"مش لاقي مقاسك؟" تختار المقاس وتسيب إيميلك (Kith).'],
+    ['suggestions/14-floating-chat-whatsapp-bubble.jpg', '14. فقاعة شات/واتساب', 'فقاعة "Chat with us" عائمة تحت (Offduty). عندنا تفتح واتساب، ومستنية الرقم من العميل.'],
+    ['suggestions/15-language-switch.jpg', '15. اختيار اللغة', 'اختيار البلد واللغة (Djerf Avenue). عندنا سويتش عربي/إنجليزي.'],
+  ]},
+  { id: 'brain-dead', title: 'Brain Dead', sub: 'wearebraindead.com', items: [
+    ['sites/brain-dead/1-shop-the-look.jpg', 'نقط Shop the look على الصورة', 'تدوس على النقطة يطلع كارت المنتج فوق الصورة.'],
+    ['sites/brain-dead/2-floating-bottom-nav.jpg', 'بار تنقل عائم تحت', 'MENU / ACCOUNT / SEARCH / CART زي الأبلكيشن.'],
+    ['sites/brain-dead/8-menu-inside-bottom-bar.jpg', 'المنيو بيفتح جوه نفس البار', 'البار بيتحول لأقسام بتتسحب بالعرض.'],
+    ['sites/brain-dead/7-added-popup-above-nav.jpg', 'كارت "اتضاف" فوق البار', 'من غير ما يفتح درج كامل: Check out أو Go to cart.'],
+    ['sites/brain-dead/3-side-discount-tab.jpg', 'تاب خصم على الجنب', 'شريط رأسي صغير بدل popup بيغطي الشاشة.'],
+    ['sites/brain-dead/4-model-size-card.jpg', 'كارت الموديل', 'صورة الموديل وطوله والمقاس اللي لابسه.'],
+    ['sites/brain-dead/5-other-designs-row.jpg', 'باقي التصميمات', 'صف "Variations" بنفس التيشيرت بطبعات تانية. ينفع لتيشيرتات التطريز.'],
+    ['sites/brain-dead/6-sticky-logo-mark.jpg', 'لوجو ثابت فوق', 'الرأس بتاع اللوجو فاضل فوق الصفحة وانت بتنزل.'],
+  ]},
+  { id: 'gymshark', title: 'Gymshark', sub: 'gymshark.com', items: [
+    ['sites/gymshark/2-people-viewed-counter.jpg', 'عداد المشاهدات', '"18.6k شافوه آخر 24 ساعة" فوق صورة المنتج.'],
+    ['sites/gymshark/3-drop-date-notify-bar.jpg', 'Drop بميعاد', 'تاريخ النزول على الصورة، وبار تحت فيه الساعة وزرار Notify me.'],
+    ['sites/gymshark/1-menu-search-tabs-image-cards.jpg', 'منيو فيه بحث وتابات وصور', 'البحث أول حاجة في المنيو، وتحته تابات وكروت بصور.'],
+    ['sites/gymshark/4-fabric-feature-icons.jpg', 'أيقونات الخامة', 'Soft / Lightweight بأيقونة وسطر. عندنا: Handmade / Soft yarn.'],
+    ['sites/gymshark/5-wishlist-heart-and-date-badges.jpg', 'قلب وبادجات على الكروت', 'قلب للحفظ، وبادج بتاريخ النزول أو اسم الكولكشن.'],
+    ['sites/gymshark/6-recently-viewed-row.jpg', 'Recently viewed', 'آخر حاجات اتفرجت عليها.'],
+  ]},
+  { id: 'kith', title: 'Kith', sub: 'kith.com', items: [
+    ['sites/kith/1-lookbook-bag-buttons.jpg', 'شنطة على صور اللوكبوك', 'كل صورة لوك عليها أيقونة شنطة.'],
+    ['sites/kith/2-shop-the-look-panel.jpg', 'لستة Shop the look', 'كل قطعة ليها مقاس وزرار Add to cart، من غير ما تخرج من الصفحة.'],
+    ['sites/kith/3-dont-see-your-size-link.jpg', '"مش لاقي مقاسك؟"', 'لينك صغير تحت المقاسات.'],
+    ['sites/kith/4-missing-size-notify-popup.jpg', 'ابعتلي لما يرجع', 'بيعرض المقاسات الخلصانة بس ويطلب الإيميل.'],
+  ]},
+  { id: 'represent', title: 'Represent', sub: 'representclo.com', items: [
+    ['sites/represent/1-header-bell-with-count.jpg', 'جرس في الهيدر', 'كان عليه رقم أحمر (2) قبل ما أفتحه.'],
+    ['sites/represent/2-whats-new-feed.jpg', 'إيه الجديد', 'الجرس بيفتح لستة أخبار بصور: Drop جديد، Restock...'],
+    ['sites/represent/3-model-vs-flat-photo-toggle-a.jpg', 'سويتش Model (صور موديل)', 'زرار واحد يقلب كل الكولكشن...'],
+    ['sites/represent/3-model-vs-flat-photo-toggle-b.jpg', 'سويتش Model (صور القطعة)', '...لصور القطعة لوحدها.'],
+    ['sites/represent/4-grid-size-switch.jpg', 'حجم الجريد', 'عمود واحد / اتنين / تلاتة.'],
+    ['sites/represent/5-product-count-and-category-tabs.jpg', 'عدد المنتجات وتابات', 'رقم صغير جنب اسم الكولكشن، وتابات أقسام بتتسحب.'],
+    ['sites/represent/6-logo-shrinks-to-monogram.jpg', 'اللوجو بيصغر لحرف', 'وانت بتنزل اللوجو بيتحول لحرف R بس.'],
+    ['sites/represent/7-style-with-complete-the-look.jpg', 'Style with', 'قطع تلبس معاها و+ للإضافة السريعة، وبادج "Restocked".'],
+    ['sites/represent/8-image-counter-and-fullscreen.jpg', 'عداد الصور و full-screen', '1/4 وأيقونة تكبير على الصورة.'],
+  ]},
+  { id: 'aime-leon-dore', title: 'Aimé Leon Dore', sub: 'aimeleondore.com', items: [
+    ['sites/aime-leon-dore/1-city-and-date-masthead.jpg', 'المدينة وتاريخ النهارده', 'زي الجرنال: "Queens, NY | Thursday…". عندنا: "Cairo | الخميس 22 أكتوبر".'],
+    ['sites/aime-leon-dore/2-menu-shop-explore-tabs-logo-watermark.jpg', 'منيو غامق فيه علامة اللوجو', 'تابين Shop / Explore والرمز باهت في الخلفية.'],
+    ['sites/aime-leon-dore/3-shop-the-look-inside-product-page.jpg', 'Shop the look جوه صفحة المنتج', 'أكورديون مفتوح فيه القطع اللي في نفس اللوك.'],
+  ]},
+  { id: 'djerf-avenue', title: 'Djerf Avenue', sub: 'djerfavenue.com (مش شغال على Shopify دلوقتي)', items: [
+    ['sites/djerf-avenue/1-card-heart-and-size-range.jpg', 'قلب ورينج المقاسات', 'القلب على الصورة، وتحت السعر "XXS-3XL".'],
+    ['sites/djerf-avenue/2-header-wishlist-and-store-tabs.jpg', 'Wishlist في الهيدر وتابات فوق', 'قلب في الهيدر، وتابات لأقسام البراند.'],
+    ['sites/djerf-avenue/3-funny-404-page.jpg', '404 بصورة الكلب', 'صفحة الغلط بقت حاجة لطيفة.'],
+  ]},
+  { id: 'allbirds', title: 'Allbirds', sub: 'allbirds.com', items: [
+    ['sites/allbirds/1-final-few-and-free-shipping-pills.jpg', 'Final few و Free shipping', 'بادج المخزون القليل، وكبسولة "+ شحن مجاني" جنب السعر.'],
+    ['sites/allbirds/2-fit-advice-under-sizes.jpg', 'نصيحة المقاس', 'سطر صريح تحت المقاسات.'],
+    ['sites/allbirds/3-ask-ai-bubble.jpg', 'اسأل AI', 'فقاعة "Shop with AI" تجاوب على أسئلة المنتج.'],
+    ['sites/allbirds/4-floating-rounded-header.jpg', 'هيدر عائم مدوّر', 'الهيدر كبسولة بيضا عائمة فوق الصفحة.'],
+    ['sites/allbirds/5-best-for-chips.jpg', 'Best for', 'شيبس: Traveling, Walking... عندنا: Everyday, Gift, Layering.'],
+  ]},
+  { id: 'pangaia', title: 'Pangaia', sub: 'pangaia.com', items: [
+    ['sites/pangaia/1-shop-the-look-button-with-count.jpg', 'زرار Shop the look بعدد', '"SHOP THE LOOK 2" على صورة اللوك.'],
+    ['sites/pangaia/1b-shop-the-look-pieces-panel.jpg', 'لوحة القطع', '"02 PIECES" بتطلع فوق الصورة وجنب كل قطعة Quick add.'],
+    ['sites/pangaia/2-fabric-and-fit-badges.jpg', 'بادجات الخامة والقصة', '"Regen. Cotton" و "New Fit" على الكارت. عندنا: Handmade / Crochet.'],
+    ['sites/pangaia/3-made-in-and-material-chips.jpg', 'صُنع في...', '"Recycled Wool · Made in Portugal". عندنا: "Handmade in Egypt".'],
+    ['sites/pangaia/4-model-height-and-size-line.jpg', 'طول الموديل', '"Isio طولها 175 ولابسة S" تحت المقاسات.'],
+    ['sites/pangaia/5-made-from-story-with-tabs.jpg', 'قصة الخامة', '"This jacket is made from…" وتابات Material / Packaging.'],
+  ]},
+  { id: 'liquid-death', title: 'Liquid Death', sub: 'liquiddeath.com', items: [
+    ['sites/liquid-death/1-social-follower-counts.jpg', 'عداد المتابعين', 'إنستجرام 7.5M وتيك توك 7.2M في آخر الصفحة.'],
+    ['sites/liquid-death/2-funny-newsletter-microcopy.jpg', 'كلام هزار في الإيميل', '"وتوافق إن Liquid Death تعملك غسيل مخ بإيميلات نادرة بس بتضحك".'],
+    ['sites/liquid-death/3-brand-voice-headlines-and-center-carousel.jpg', 'عناوين بصوت البراند', '"Murder your thirst"، وكاروسيل المنتج في النص.'],
+    ['sites/liquid-death/4-fan-club-join.jpg', 'نادي المعجبين', '"Country Club" بزرار Join. عندنا: "Loss Club".'],
+  ]},
+  { id: 'lazy-oaf', title: 'Lazy Oaf', sub: 'lazyoaf.com', items: [
+    ['sites/lazy-oaf/1-before-after-drag-slider.jpg', 'سلايدر قبل/بعد', 'تسحب الخط تشوف البنطلون من الوشين. ينفع للقطع الـ reversible أو الوش والضهر.'],
+    ['sites/lazy-oaf/4-model-size-caption-on-photo.jpg', 'المقاس مكتوب على الصورة', '"Bella لابسة L وطولها 5\'10" على صورة الموديل نفسها.'],
+    ['sites/lazy-oaf/2-shop-our-socials-strip.jpg', 'Shop our socials', 'صور من إنستجرام في الهوم.'],
+    ['sites/lazy-oaf/3-brand-promises-with-icons.jpg', 'وعود البراند بأيقونات', '"Limited runs. Not boring." و "Changed your mind?".'],
+  ]},
+  { id: 'scuffers', title: 'Scuffers', sub: 'scuffers.com', items: [
+    ['sites/scuffers/4-glass-cart-free-shipping-bar-upsell.jpg', 'كارت إزاز', 'شحن مجاني ومقترحات وشريط ثقة متحرك، كله بستايل الإزاز.'],
+    ['sites/scuffers/1-glass-buttons-on-hero.jpg', 'أزرار إزاز على الهيرو', '"Man" و"Woman" في أماكن مختلفة على الصورة.'],
+    ['sites/scuffers/2-just-woman-toggle-on-grid.jpg', 'سويتش فوق المنتجات', '"Just Woman" بيفلتر الجريد بضغطة.'],
+    ['sites/scuffers/3-editorial-photos-mixed-in-grid.jpg', 'صور إديتوريال وسط المنتجات', 'صور لوك عريضة وطويلة وسط كروت المنتجات.'],
+  ]},
+  { id: 'kotn', title: 'Kotn', sub: 'kotn.com', items: [
+    ['sites/kotn/1-arabic-wordmark-in-footer.jpg', 'كلمة عربي في الفوتر', '"قطن" بالعربي في آخر الصفحة. عندنا ممكن "لوس" أو جملة مصري.'],
+    ['sites/kotn/2-brand-story-video-on-product-page.jpg', 'قصة البراند في صفحة المنتج', 'About us وفيديو تحت المنتجات المقترحة.'],
+  ]},
+  { id: 'bluorng', title: 'Bluorng', sub: 'bluorng.com (براند هندي على Shopify)', items: [
+    ['sites/bluorng/1-app-style-glass-tab-bar-with-story-button.jpg', 'تاب بار إزاز زي الأبلكيشن', 'ستوري، استكشاف، حساب، فروع، بحث، وشات منفصل.'],
+    ['sites/bluorng/3-fullscreen-story-viewer.jpg', 'ستوري full-screen', '"Best Cap, No Cap." وزرار Shop Now.'],
+    ['sites/bluorng/2-save-bookmark-icons.jpg', 'Bookmark بدل القلب', 'علامة حفظ على الكروت وفي الهيدر.'],
+    ['sites/bluorng/4-spinning-3d-logo-on-hero.jpg', 'لوجو 3D بيلف', 'عملة باللوجو بتلف على الهيرو وجنبها إيد "دوس".'],
+    ['sites/bluorng/5-search-sheet-with-collection-photos.jpg', 'بحث بصور', 'الكولكشنز بصور أول ما تفتح البحث.'],
+  ]},
+  { id: 'offduty', title: 'Offduty', sub: 'offduty.in (براند هندي على Shopify)', items: [
+    ['sites/offduty/1-shoppable-vertical-videos.jpg', 'فيديوهات Shop the look', 'فيديو طولي وعليه اسم المنتج وسعره.'],
+    ['sites/offduty/2-made-in-and-pay-on-delivery-strip.jpg', 'صنع محلي + الدفع عند الاستلام', 'شريط ثقة بـ 3 أيقونات. عندنا: Made in Egypt / الدفع عند الاستلام (لما العميل يأكد).'],
+    ['sites/offduty/3-floating-chat-bubble.jpg', 'فقاعة شات', '"Chat with us!" عائمة تحت.'],
+  ]},
+];
+const nav = document.getElementById('nav'), main = document.getElementById('main');
+for (const s of S) {
+  nav.insertAdjacentHTML('beforeend', `<a href="#${s.id}">${s.title}</a>`);
+  const sec = document.createElement('section'); sec.id = s.id;
+  sec.innerHTML = `<h2>${s.title} ${s.sub ? `<small>${s.sub}</small>` : ''}</h2>${s.note ? `<p class="note">${s.note}</p>` : ''}<div class="grid"></div>`;
+  for (const [src, t, d] of s.items) sec.querySelector('.grid').insertAdjacentHTML('beforeend',
+    `<figure><img loading="lazy" src="${src}" alt="${t}"><figcaption><b>${t}</b><span>${d}</span></figcaption></figure>`);
+  main.appendChild(sec);
+}
+const zoom = document.getElementById('zoom');
+main.addEventListener('click', e => { if (e.target.tagName === 'IMG') { zoom.querySelector('img').src = e.target.src; zoom.showModal(); } });
+zoom.addEventListener('click', () => zoom.close());
+</script>
+</body>
+</html>
