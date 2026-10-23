@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss Feature Prices</title>
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --red: #e3000f; --green: #1f8a4c; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --green: #4cc483; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  header { padding: 28px 16px 8px; max-width: 1200px; margin: auto; }
+  h1 { margin: 0; font-size: 26px; }
+  .bar { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 16px; }
+  .bar div { max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: baseline; }
+  .bar b { font-size: 20px; }
+  .bar span { color: var(--muted); font-size: 13.5px; }
+  .bar button { margin-inline-start: auto; background: none; border: 1px solid var(--line); color: var(--ink); border-radius: 999px; padding: 3px 12px; font: inherit; font-size: 13px; cursor: pointer; }
+  section { max-width: 1200px; margin: auto; padding: 22px 16px 8px; }
+  h2 { margin: 0 0 12px; font-size: 20px; }
+  h2 small { font-weight: 400; color: var(--muted); font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+  article { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
+  article.off { opacity: .45; }
+  .pics { display: flex; gap: 4px; padding: 4px; overflow-x: auto; background: var(--bg); }
+  .pics img { flex: 1 0 0; min-width: 110px; max-height: 340px; object-fit: cover; object-position: top; border-radius: 10px; cursor: zoom-in; }
+  .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .num { color: var(--muted); font-size: 13px; }
+  .body b { font-size: 16px; }
+  .body p { margin: 0; color: var(--muted); font-size: 13.5px; }
+  .dup { color: var(--red); font-size: 12.5px; }
+  .foot { margin-top: auto; padding-top: 8px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); }
+  .price { font-size: 22px; font-weight: 700; color: var(--green); }
+  .price small { font-size: 13px; font-weight: 400; }
+  label { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; cursor: pointer; }
+  dialog { border: 0; padding: 0; background: transparent; max-width: 96vw; }
+  dialog::backdrop { background: rgba(0,0,0,.8); }
+  dialog img { max-height: 92vh; max-width: 96vw; display: block; border-radius: 10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>أسعار الـ features</h1>
+</header>
+<div class="bar"><div>
+  <b id="total"></b>
+  <span id="count"></span>
+  <button id="all" type="button">علّم على الكل</button>
+</div></div>
+<main id="list"></main>
+<dialog id="zoom"><img alt=""></dialog>
+<script>
+const DATA = {};
+const img = s => DATA[s] || encodeURI('WhatsApp Image 2026-10-23 at 11.58.' + s + '.jpeg');
+const G = [
+  { title: 'جاهز في الثيم', sub: 'تفعيل وظبط شكل بس', items: [
+    [800, 'اختيار اللغة عربي/إنجليزي', 'زرار يختار منه العميل عربي أو إنجليزي، والموقع كله يتقلب للغة دي، مع ظبط الاتجاه من اليمين للشمال.', ['45 AM (5)']],
+    [700, 'Shop the look', 'نقط على صورة اللوك بتطلع كارت المنتج، ولستة فيها مقاس وزرار Add to cart لكل قطعة.', ['45 AM (4)', '44 AM (6)'], 'الصورتين بيتعملوا مع بعض'],
+    [400, 'بحث بصور', 'البحث بيطلع ومعاه الكولكشنز بصور قبل ما تكتب.', ['46 AM (1)']],
+    [250, 'فاضل قطع قليلة', 'بادج "فاضل 2 بس" على الكارت وصفحة المنتج لما المقاس يقل.', ['46 AM (4)', '43 AM (2)'], 'الصورتين نفس الـ feature'],
+    [200, 'جاليري full-screen', 'تدوس على الصورة تفتح كل الصور full-screen، ومعاها عداد 1/4 وأيقونة تكبير.', ['46 AM', '44 AM'], 'الصورتين نفس الـ feature'],
+    [200, 'Style with', 'قطع تلبس معاها و+ للإضافة السريعة، وبادج Restocked.', ['44 AM (1)']],
+    [200, 'باقي التصميمات', 'صف Variations بنفس التيشيرت بتطريزات تانية.', ['45 AM (1)']],
+    [200, 'Loss Club', 'سكشن نادي المعجبين بزرار Join. المميزات محتاجة تتحدد من العميلة.', ['41 AM (5)']],
+    [150, 'أيقونات الخامة', 'أيقونة وسطر في صفحة المنتج: Handmade / Soft yarn.', ['45 AM']],
+    [150, 'وعود البراند بأيقونات', '4 أيقونات وتحت كل واحدة جملة عن البراند.', ['41 AM (2)']],
+    [150, 'Shop our socials', 'صور من إنستجرام بنحطها بإيدينا.', ['41 AM (3)']],
+    [150, 'قصة البراند في صفحة المنتج', 'About us وفيديو تحت المنتجات المقترحة.', ['41 AM']],
+    [100, 'حجم الجريد', 'المنتجات في عمود واحد أو اتنين أو تلاتة.', ['44 AM (3)']],
+    [100, 'عناوين بصوت البراند', 'عناوين بطريقة Loss. الكلام من العميلة.', ['42 AM']],
+    [50, 'كلام هزار في الإيميل', 'جملة دمها خفيف جنب خانة الإيميل.', ['42 AM (1)']],
+    [50, 'كلمة عربي في الفوتر', '"لوس" أو جملة مصري في آخر الصفحة.', ['41 AM (1)']],
+  ]},
+  { title: 'App مجاني', sub: 'تركيب وظبط شكل', items: [
+    [400, 'Wishlist', 'قلب أو Bookmark على الكروت، وأيقونة في الهيدر، وصفحة للحاجات المحفوظة. لازم تختار القلب أو الـ Bookmark.', ['46 AM (6)', '43 AM (4)', '43 AM (3)', '40 AM'], 'الـ 4 صور دول نفس الـ feature'],
+    [300, 'ابعتلي لما يرجع', 'تختار المقاس الخلصان وتسيب إيميلك.', ['45 AM (6)', '44 AM (5)'], 'الصورتين نفس الـ feature'],
+    [200, 'تاب خصم على الجنب', 'شريط رأسي صغير بدل popup بيغطي الشاشة. محتاجين كود الخصم من العميلة.', ['45 AM (3)']],
+  ]},
+  { title: 'كود بسيط', sub: '', items: [
+    [700, 'فيديوهات طولية', 'فيديوهات زي تيك توك وتحت كل فيديو اسم المنتج وسعره. محتاجين الفيديوهات من العميلة.', ['46 AM (2)']],
+    [500, 'الكارت: شحن مجاني + مقترحات', 'شريط "فاضلك كام للشحن المجاني" وتحته You may also like. محتاجين حد الشحن المجاني من العميلة.', ['46 AM (3)']],
+    [350, 'سويتش Model', 'زرار واحد يقلب كل صور الكولكشن من صورة المنتج لصورة الموديل.', ['44 AM (4)']],
+    [300, 'كارت الموديل', 'صورة الموديل وطوله والمقاس اللي لابسه، ومكتوب على الصورة كمان. محتاجين البيانات دي من العميلة لكل منتج.', ['45 AM (2)', '41 AM (4)'], 'الصورتين من نفس البيانات'],
+    [200, 'اللوجو بيصغر لحرف', 'وانت بتنزل اللوجو بيتحول لحرف L بس.', ['44 AM (2)']],
+    [150, 'تابات فوق الهيدر', 'تابات لأقسام البراند فوق.', ['43 AM (3)'], 'نفس صورة الـ Wishlist، بس دي الحتة التانية فيها'],
+    [150, 'نصيحة المقاس', 'سطر تحت المقاسات زي "بيجي ضيق، خد مقاس أكبر".', ['46 AM (5)', '43 AM (1)'], 'الصورتين نفس الـ feature'],
+    [100, 'رينج المقاسات على الكارت', 'تحت السعر مكتوب S–XL.', ['43 AM (4)'], 'نفس صورة الـ Wishlist، بس دي الحتة التانية فيها'],
+    [100, 'المدينة وتاريخ النهارده', 'Cairo | الخميس 22 أكتوبر.', ['43 AM (5)']],
+    [50, 'كبسولة "+ شحن مجاني"', 'جنب السعر.', ['43 AM (2)'], 'نفس صورة "فاضل قطع قليلة"، بس دي الحتة التانية فيها'],
+    [50, 'بادجات الخامة على الكروت', 'Handmade / Crochet على كروت المنتجات.', ['43 AM']],
+  ]},
+];
+
+const fmt = n => n.toLocaleString('en-US');
+const list = document.getElementById('list');
+let n = 0;
+const sec = document.createElement('section');
+sec.innerHTML = '<div class="grid"></div>';
+const grid = sec.querySelector('.grid');
+list.append(sec);
+for (const g of G) {
+  for (const [price, title, note, pics, dup] of g.items) {
+    n++;
+    const a = document.createElement('article');
+    a.dataset.price = price;
+    a.innerHTML = `
+      <div class="pics">${pics.map(p => `<img loading="lazy" src="${img(p)}" alt="${title}">`).join('')}</div>
+      <div class="body">
+        <span class="num">#${n}</span>
+        <b>${title}</b>
+        <p>${note}</p>
+        ${dup ? `<span class="dup">${dup}</span>` : ''}
+        <div class="foot">
+          <span class="price">${fmt(price)} <small>ج</small></span>
+          <label><input type="checkbox" checked> عايزاها</label>
+        </div>
+      </div>`;
+    grid.append(a);
+  }
+}
+
+const boxes = [...document.querySelectorAll('article input')];
+function update() {
+  let total = 0, on = 0;
+  for (const b of boxes) {
+    const a = b.closest('article');
+    a.classList.toggle('off', !b.checked);
+    if (b.checked) { total += +a.dataset.price; on++; }
+  }
+  document.getElementById('total').textContent = `التوتال: ${fmt(total)} ج`;
+  document.getElementById('count').textContent = `${on} من ${boxes.length} feature`;
+}
+boxes.forEach(b => b.addEventListener('change', update));
+document.getElementById('all').onclick = () => { boxes.forEach(b => b.checked = true); update(); };
+update();
+
+const dlg = document.getElementById('zoom');
+list.addEventListener('click', e => {
+  if (e.target.tagName === 'IMG') { dlg.querySelector('img').src = e.target.src; dlg.showModal(); }
+});
+dlg.addEventListener('click', () => dlg.close());
+</script>
+</body>
+</html>
