@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss WhatsApp Confirmation</title>
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --soft: #e6e8f3; --green: #1f8a4c; --orange: #a35d00; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --soft: #232a50; --green: #4cc483; --orange: #f0b860; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15.5px/1.75 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  main { max-width: 780px; margin: auto; padding: 28px 16px 56px; display: grid; gap: 30px; }
+  h1 { margin: 0; font-size: 26px; line-height: 1.4; }
+  h2 { margin: 0; font-size: 20px; }
+  h3 { margin: 0; font-size: 18px; }
+  p { margin: 0; }
+  ul, ol { margin: 0; padding-inline-start: 1.3em; display: grid; gap: 4px; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13.5px; }
+  header { display: grid; gap: 8px; }
+  .idea { background: var(--soft); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; }
+  section { display: grid; gap: 14px; }
+  .opts { display: grid; gap: 14px; }
+  article { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+  article.pick { border: 2px solid var(--ink); }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 14px; }
+  .chip { font-size: 12.5px; padding: 2px 10px; border-radius: 999px; background: var(--soft); color: var(--muted); white-space: nowrap; }
+  .price { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .rows { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; }
+  .rows span:nth-child(odd) { color: var(--muted); font-size: 14px; }
+  .pc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; }
+  .pc > div { min-width: 0; display: grid; gap: 4px; }
+  .plus li::marker { color: var(--green); }
+  .minus li::marker { color: var(--orange); }
+  .ltr { direction: ltr; unicode-bidi: isolate; }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+  @media (max-width: 560px) {
+    h1 { font-size: 22px; }
+    .pc { grid-template-columns: 1fr; }
+    .rows { grid-template-columns: 1fr; gap: 0; }
+    .rows span:nth-child(even) { margin-bottom: 6px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>رسالة تأكيد الأوردر على واتساب</h1>
+    <p class="muted">دي كل الطرق اللي ينفع نبعت بيها رسالة تأكيد للعميل بعد ما يطلب من الموقع، وسعر كل واحدة ومحتاجة إيه، عشان نختار.</p>
+  </header>
+
+  <div class="idea">
+    <b>الفكرة ببساطة</b>
+    <ol>
+      <li>العميل يطلب من الموقع والدفع عند الاستلام.</li>
+      <li>توصله رسالة على واتساب فيها رقم الأوردر والمنتجات والعنوان والإجمالي، وتحتها زرارين: <b>تأكيد</b> و<b>إلغاء</b>.</li>
+      <li>الأوردر بيتعلّم عليه على Shopify لوحده إنه اتأكد أو اتلغى، واللي اتأكد بيتبعت لتربو عشان يتشحن.</li>
+    </ol>
+  </div>
+
+  <section>
+    <h2>الاختيارات</h2>
+    <div class="opts">
+
+      <article>
+        <div class="head">
+          <h3>Whapi</h3>
+          <span class="chip">أكتر واحد مجرّب: 41 تقييم بـ 4.8</span>
+        </div>
+        <div class="price">18.99$ في الشهر (أو 149$ في السنة) + مصاريف رسايل بسيطة</div>
+        <div class="rows">
+          <span>مصاريف الرسايل</span><span>حوالي ربع جنيه أو أقل على الرسالة، وبتتدفع لواتساب (Meta) على طول.</span>
+          <span>الرسالة جاية من</span><span>رقم Loss نفسه.</span>
+          <span>تجربة ببلاش</span><span>7 أيام.</span>
+        </div>
+        <div class="pc">
+          <div><span class="muted small">الحلو فيه</span>
+            <ul class="plus"><li>أكتر تطبيق الناس جرّبته، وفيه تقييمات من براندات مصرية.</li><li>زرار تأكيد وزرار إلغاء، والأوردر بيتعلّم عليه لوحده.</li><li>لو العميل داس إلغاء، ممكن الأوردر يتلغي على Shopify لوحده.</li></ul>
+          </div>
+          <div><span class="muted small">اللي مش حلو</span>
+            <ul class="minus"><li>أغلى واحد فيهم.</li><li>محتاج نربط رقم بواتساب الرسمي (تحت مكتوب محتاج إيه).</li></ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="pick">
+        <div class="head">
+          <h3>Akeed</h3>
+          <span class="chip">الأسهل والأرخص في الأول</span>
+        </div>
+        <div class="price">أول 30 رسالة ببلاش، وبعدها 9.99$ في الشهر لـ 300 رسالة</div>
+        <div class="rows">
+          <span>باقات أكبر</span><span><span class="ltr">22.99$</span> لـ 1000 رسالة، أو <span class="ltr">49.99$</span> لـ 2500 رسالة.</span>
+          <span>الرسالة جاية من</span><span>رقم Akeed، بس باسم Loss واللوجو بتاعه.</span>
+          <span>الشركة</span><span>مصرية.</span>
+        </div>
+        <div class="pc">
+          <div><span class="muted small">الحلو فيه</span>
+            <ul class="plus"><li>مش محتاج أي ربط مع واتساب الرسمي، يشتغل من أول يوم.</li><li>عربي، والعميل بيأكد بضغطة واحدة، وبيفكّره لو ما ردّش.</li><li>بيلغي الأوردر لوحده لو العميل ما أكّدش.</li></ul>
+          </div>
+          <div><span class="muted small">اللي مش حلو</span>
+            <ul class="minus"><li>جديد وعليه تقييم واحد بس.</li><li>الرسالة مش جاية من رقم البراند.</li></ul>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <div class="head">
+          <h3>Wapify</h3>
+          <span class="chip">مصري، وفيه شات ترد منه على العملاء</span>
+        </div>
+        <div class="price">أول 50 رسالة ببلاش، وبعدها 9.99$ في الشهر والتأكيدات مفتوحة</div>
+        <div class="rows">
+          <span>باقات أكبر</span><span><span class="ltr">29.99$</span> لو عايزين رسايل عروض كمان، و<span class="ltr">64.99$</span> لو عايزين ردود أوتوماتيك على العملاء.</span>
+          <span>الرسالة جاية من</span><span>رقمهم أو رقم Loss (رقم Loss محتاج ربط بواتساب الرسمي).</span>
+        </div>
+        <div class="pc">
+          <div><span class="muted small">الحلو فيه</span>
+            <ul class="plus"><li>عربي، وفيه عربون بانستاباي لو حبينا.</li><li>ممكن نبدأ برقمهم ونحوّل لرقم Loss بعدين.</li></ul>
+          </div>
+          <div><span class="muted small">اللي مش حلو</span>
+            <ul class="minus"><li>جديد وعليه تقييم واحد.</li><li>مش مربوط بتربو.</li></ul>
+          </div>
+        </div>
+      </article>
+
+      <article>
+        <div class="head">
+          <h3>يدوي من واتساب بيزنس</h3>
+          <span class="chip">ببلاش</span>
+        </div>
+        <div class="price">ببلاش</div>
+        <div class="rows">
+          <span>الرسالة جاية من</span><span>رقم Loss العادي.</span>
+          <span>محتاج</span><span>حد من التيم يبعت لكل أوردر بإيده ويغيّر حالته على Shopify.</span>
+        </div>
+        <p class="muted small">ينفع لو الأوردرات قليلة، بس مفيش زراير ولا حاجة بتحصل لوحدها، ومش هنعرف نربطه بتربو أوتوماتيك.</p>
+      </article>
+
+    </div>
+    <p class="muted small">مش هنستخدم التطبيقات اللي بتربط الموبايل زي واتساب ويب، لأن دي طريقة مش رسمية وواتساب ممكن يقفل الرقم لو بعت رسايل كتير.</p>
+    <p class="muted small">الأسعار كلها بالدولار وبتتخصم مع فاتورة Shopify كل شهر. مصاريف الرسايل (في Whapi أو لو استخدمنا رقم Loss) بتتدفع بكارت على حساب واتساب الرسمي.</p>
+  </section>
+
+  <section class="box">
+    <h2>لو عايزين الرسالة تيجي من رقم Loss</h2>
+    <p>ده لازم في Whapi، وفي Wapify لو اخترنا رقم Loss. هنحتاج:</p>
+    <ul>
+      <li>رقم موبايل للبراند يستقبل كود التفعيل (رسالة أو مكالمة).</li>
+      <li>حساب Meta Business (بتاع فيسبوك) باسم البراند.</li>
+      <li>فيزا أو ماستركارد على الحساب ده عشان مصاريف الرسايل.</li>
+      <li>واتساب يوافق على اسم Loss وعلى نص رسالة التأكيد.</li>
+      <li>الرقم ده ممكن ما يفضلش شغال على أبلكيشن واتساب العادي زي الأول، فالأحسن يبقى رقم مخصوص للحكاية دي.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>رأيي</h2>
+    <p><b>نبدأ بـ Akeed</b> لو عايزين نبدأ بسرعة وبأقل فلوس: نجرّب بالـ 30 رسالة اللي ببلاش، ومش محتاجين نعمل أي حاجة مع واتساب. ولو مهم إن الرسالة تيجي من رقم Loss ومعندناش مشكلة في حوالي 19$ في الشهر، يبقى <b>Whapi</b> أحسن لأن الناس مجرّباه أكتر.</p>
+    <p class="muted small">في كل الحالات الأوردر بيتعلّم عليه إنه اتأكد أو اتلغى، وده اللي هنستخدمه بعدين عشان الأوردر المتأكد يتبعت لتربو لوحده. ولحد ما نظبط ده، الأوردرات المتأكدة بتتبعت لتربو كلها مرة واحدة من صفحة الأوردرات.</p>
+  </section>
+
+  <section class="box">
+    <h2>محتاجين نعرف منك</h2>
+    <ol>
+      <li>لازم الرسالة تيجي من رقم Loss، ولا عادي تيجي من رقم التطبيق بس باسم Loss واللوجو؟</li>
+      <li>الميزانية في الشهر قد إيه للحتة دي؟</li>
+      <li>بيجيلك كام أوردر في الشهر تقريبًا؟ (عشان نختار الباقة)</li>
+      <li>لو هنستخدم رقم Loss: فيه رقم مخصوص ينفع نربطه، وفيه حساب Meta Business؟</li>
+    </ol>
+  </section>
+</main>
+</body>
+</html>
