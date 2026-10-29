@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss Product Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --navy: #0b0d47; --line: #2e3180; --white: #fff; --m: 40px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--navy); color: var(--white); font-family: Geist, system-ui, sans-serif; padding-bottom: 64px; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; width: 100%; object-fit: cover; }
+
+  .opt { margin: 0 auto 32px; border-top: 1px solid var(--line); }
+  .tag { padding: 28px var(--m) 4px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; opacity: .55; }
+  .note { padding: 0 var(--m) 28px; font-size: 15px; opacity: .8; direction: rtl; text-align: right; max-width: 820px; margin-left: auto; line-height: 1.7; }
+  .opt h3 { font-family: "Playfair Display", serif; font-weight: 500; font-size: 30px; margin: 0 var(--m) 24px; }
+  .opt h3.center { text-align: center; margin-inline: auto; }
+  .opt h4 { font-family: "Playfair Display", serif; font-weight: 500; font-size: 22px; margin: 0 var(--m) 18px; }
+
+  /* product card */
+  .grid { display: grid; gap: 24px 8px; margin: 0 var(--m); }
+  .c3 { grid-template-columns: repeat(3, 1fr); }
+  .c4 { grid-template-columns: repeat(4, 1fr); }
+  .c5 { grid-template-columns: repeat(5, 1fr); }
+  .card .ph { position: relative; aspect-ratio: 4 / 5; overflow: hidden; }
+  .card .ph img { height: 100%; transition: transform .6s ease; }
+  .card:hover .ph img { transform: scale(1.03); }
+  .badge { position: absolute; top: 8px; left: 8px; background: var(--navy); font-size: 12px; font-weight: 600; padding: 4px 8px; }
+  .meta { display: flex; justify-content: space-between; gap: 8px; padding-top: 10px; font-size: 14px; }
+  .meta .p { opacity: .9; margin-top: 2px; }
+  .meta s { opacity: .55; margin-left: 4px; }
+  .plus { font-size: 20px; line-height: 1; font-weight: 300; }
+
+  /* 0 current */
+  .o0 .cats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 48px; }
+  .o0 .cats .ph { aspect-ratio: 4 / 5; overflow: hidden; position: relative; }
+  .o0 .cats img { height: 100%; }
+  .catlbl { position: absolute; left: 20px; bottom: 20px; font-size: 18px; font-weight: 500; display: flex; gap: 10px; border-bottom: 1px solid rgba(255,255,255,.6); padding-bottom: 4px; z-index: 1; }
+  .shade::after { content: ""; position: absolute; inset: 55% 0 0; background: linear-gradient(to top, rgba(0,0,0,.45), transparent); }
+  .arrow { display: inline-block; transition: transform .25s ease; }
+  a:hover .arrow { transform: translateX(4px); }
+
+  /* 1 text links */
+  .o1 .links { display: grid; grid-template-columns: repeat(3, 1fr); margin: 64px var(--m) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .o1 .links a { display: flex; justify-content: space-between; align-items: center; padding: 28px 24px; font-family: "Playfair Display", serif; font-size: 28px; border-left: 1px solid var(--line); transition: background .25s, color .25s; }
+  .o1 .links a:first-child { border-left: 0; }
+  .o1 .links a:hover { background: var(--white); color: var(--navy); }
+  .o1 .links small { display: block; font-family: Geist, sans-serif; font-size: 13px; opacity: .6; margin-top: 4px; }
+  .o1 .links a:hover small { opacity: .8; }
+
+  /* 2 circles */
+  .o2 .circles { display: flex; justify-content: center; gap: 48px; margin-top: 64px; padding-top: 40px; border-top: 1px solid var(--line); margin-inline: var(--m); }
+  .o2 .circles a { text-align: center; font-size: 15px; letter-spacing: .03em; }
+  .o2 .circles .ring { width: 132px; height: 132px; border-radius: 50%; overflow: hidden; margin-bottom: 12px; outline: 1px solid transparent; outline-offset: 4px; transition: outline-color .25s; }
+  .o2 .circles img { height: 100%; }
+  .o2 .circles a:hover .ring { outline-color: var(--white); }
+
+  /* 3 narrow cards */
+  .o3 .cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 900px; margin: 0 auto; padding: 0 var(--m); }
+  .o3 .cats a { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; }
+  .o3 .cats img { height: 100%; transition: transform .6s ease; }
+  .o3 .cats a:hover img { transform: scale(1.03); }
+  .o3 .sep { margin: 64px var(--m) 40px; border-top: 1px solid var(--line); }
+
+  /* 4 list tiles */
+  .o4 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 64px var(--m) 0; }
+  .o4 .tiles a { display: flex; align-items: center; gap: 18px; border: 1px solid var(--line); padding: 10px; transition: border-color .25s; }
+  .o4 .tiles a:hover { border-color: var(--white); }
+  .o4 .tiles .th { width: 84px; aspect-ratio: 4 / 5; flex: none; overflow: hidden; }
+  .o4 .tiles img { height: 100%; }
+  .o4 .tiles b { font-family: "Playfair Display", serif; font-weight: 500; font-size: 22px; display: block; }
+  .o4 .tiles small { font-size: 13px; opacity: .6; }
+  .o4 .tiles .arrow { margin-left: auto; margin-right: 10px; font-size: 18px; }
+
+  .intro { direction: rtl; max-width: 820px; margin: 0 auto; padding: 40px var(--m) 32px; display: grid; gap: 10px; line-height: 1.8; }
+  .intro h1 { font-size: 28px; font-weight: 600; }
+  .intro h2 { font-size: 22px; font-weight: 600; }
+  .intro p { font-size: 16px; opacity: .85; }
+  .intro .dim { font-size: 14px; opacity: .6; }
+  .tag { direction: rtl; text-align: right; font-size: 18px; letter-spacing: 0; text-transform: none; opacity: 1; font-weight: 600; max-width: 820px; margin-left: auto; }
+
+  @media (max-width: 749px) {
+    :root { --m: 16px; }
+    .c3, .c4, .c5 { grid-template-columns: repeat(2, 1fr); }
+    .c5 .card:nth-child(n+5), .c4 .card:nth-child(n+5) { display: none; }
+    .o1 .links, .o4 .tiles { grid-template-columns: 1fr; }
+    .o1 .links a { border-left: 0; border-top: 1px solid var(--line); font-size: 22px; padding: 20px 8px; }
+    .o1 .links a:first-child { border-top: 0; }
+    .o2 .circles { gap: 20px; }
+    .o2 .circles .ring { width: 88px; height: 88px; }
+    .o3 .cats { padding: 0 var(--m); }
+    .opt h3 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<header class="intro">
+  <h1>آخر صفحة المنتج</h1>
+  <p>ده الجزء اللي تحت المنتج: "You may also like" وتحته الأقسام. عملنا 4 أشكال بصور ومنتجات من الموقع، وأول واحد هو الشكل الحالي عشان نقارن ونختار.</p>
+</header>
+<div id="root"></div>
+<footer class="intro">
+  <h2>رأيي</h2>
+  <p><b>شكل 2</b> هو الأحسن في رأيي: ماشي مع صفحات الأقسام، والصور فيه صغيرة فمش بتبان مشدودة.</p>
+  <p class="dim">على الموبايل كل الأشكال بتبقى منتجين جنب بعض، والأقسام في شكل 1 و4 بتنزل تحت بعض.</p>
+</footer>
+<script>
+  const img = (name) => `img/${name}.jpg`;
+  const products = [
+    ["Black Lace Classic Pantyhose", "black-lace", 400, 550],
+    ["Burgundy Lace Classic Pantyhose", "burgundy-lace", 400, 550],
+    ["White Lace Classic Pantyhose", "white-lace", 400, 550],
+    ["Chemise", "chemise", 600, 900],
+    ["Light Henley Sweater Long Sleeve", "light-henley", 600, 1000],
+  ];
+  const cats = [
+    ["Tops", "dark-henley", "Tees, sweaters, shirts"],
+    ["Bottoms", "black-lace", "Pantyhose"],
+    ["Handmade", "cotton-snugz", "Crochet snugz, made by hand"],
+  ];
+  const card = ([t, d, p, c]) => `<a class="card" href="#"><div class="ph"><img src="${img(d)}" alt=""><span class="badge">SALE</span></div>
+    <div class="meta"><div>${t}<div class="p">LE ${p}.00 EGP<s>LE ${c}.00 EGP</s></div></div><span class="plus">+</span></div></a>`;
+  const grid = (n) => `<div class="grid c${n}">${products.slice(0, n).map(card).join("")}</div>`;
+
+  const options = [
+    ["o0", "الشكل الحالي", "الشكل اللي على الموقع دلوقتي: 3 صور كبيرة، وتحتها الأقسام لازقة في بعض ومن أول الشاشة لآخرها.",
+      `<h3>You may also like</h3>${grid(3)}
+       <div class="cats">${cats.map(([n, d]) => `<a href="#" class="ph shade"><img src="${img(d)}" alt=""><span class="catlbl">${n} <span class="arrow">→</span></span></a>`).join("")}</div>`],
+
+    ["o1", "شكل 1 · كلام من غير صور", "4 منتجات أصغر في الصف زي الصفحة الرئيسية. الأقسام من غير صور: 3 كلمات كبيرة جوه خطوط رفيعة، وكل واحدة بتنوّر أبيض لما الماوس يقف عليها. ده أهدى شكل، ومفيش صور بتتكرر.",
+      `<h3>You may also like</h3>${grid(4)}
+       <div class="links">${cats.map(([n, , s]) => `<a href="#"><span>${n}<small>${s}</small></span><span class="arrow">→</span></a>`).join("")}</div>`],
+
+    ["o2", "شكل 2 · دواير", "4 منتجات زي الصفحة الرئيسية، والأقسام دواير صغيرة في النص، نفس الدواير اللي فوق صفحات الأقسام، فالموقع كله يبان بنفس الشكل.",
+      `<h3>You may also like</h3>${grid(4)}
+       <div class="circles">${cats.map(([n, d]) => `<a href="#"><div class="ring"><img src="${img(d)}" alt=""></div>${n}</a>`).join("")}</div>`],
+
+    ["o3", "شكل 3 · نفس الصور بس أصغر", "4 منتجات زي الصفحة الرئيسية. الأقسام فضلت صور بنفس الكتابة اللي عليها دلوقتي، بس أصغر وفي النص وبينها مسافة صغيرة.",
+      `<h3>You may also like</h3>${grid(4)}<div class="sep"></div><h3 class="center">Shop by category</h3>
+       <div class="cats">${cats.map(([n, d]) => `<a href="#" class="shade"><img src="${img(d)}" alt=""><span class="catlbl">${n} <span class="arrow">→</span></span></a>`).join("")}</div>`],
+
+    ["o4", "شكل 4 · شرايط صغيرة", "5 منتجات أصغر في الصف. كل قسم شريط صغير فيه صورة صغيرة واسمه وسهم، وده أقل شكل بياخد مكان.",
+      `<h3>You may also like</h3>${grid(5)}
+       <div class="tiles">${cats.map(([n, d, s]) => `<a href="#"><div class="th"><img src="${img(d)}" alt=""></div><div><b>${n}</b><small>${s}</small></div><span class="arrow">→</span></a>`).join("")}</div>`],
+  ];
+
+  document.getElementById("root").innerHTML = options.map(([cls, tag, note, html]) =>
+    `<section class="opt ${cls}"><div class="tag">${tag}</div><p class="note">${note}</p>${html}</section>`).join("");
+</script>
+</body>
+</html>
