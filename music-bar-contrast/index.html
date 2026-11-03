@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music Bar Contrast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --site: #0b0d47; --sky: #4a9bf0; --cream: #ece7dc; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; } }
+  :root[data-theme="dark"] { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.6 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  header.page { padding: 28px 16px 8px; max-width: 1280px; margin: auto; }
+  h1 { margin: 0 0 6px; font-size: 26px; }
+  header.page p { margin: 0; color: var(--muted); }
+  main { max-width: 1280px; margin: auto; padding: 16px; display: grid; gap: 22px; }
+  figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  figcaption { padding: 12px 2px 0; }
+  figcaption b { display: block; margin-bottom: 2px; font-size: 16px; }
+  figcaption span { color: var(--muted); font-size: 13.5px; }
+  .tag { display: inline-block; border-radius: 6px; padding: 0 7px; font-size: 12px; margin-inline-start: 6px; vertical-align: middle; color: #fff; background: #6b7280; }
+
+  /* Three real backgrounds the bar floats over: the hero photo, the navy site, a light product photo */
+  .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 900px) { .tiles { grid-template-columns: 1fr; } }
+  .tile { direction: ltr; position: relative; aspect-ratio: 16 / 10; min-height: 150px; overflow: hidden; border-radius: 8px; font-family: Geist, sans-serif; }
+  .tile.hero { background: url(img/hero-crop.jpg) center / cover; }
+  .tile.site { background: var(--site); }
+  .tile.light { background: url(img/008-dark-henley-sweater-short-sleeve.jpg) right 80% / cover; }
+  .tile.site .cards { position: absolute; inset: 12px 12px auto; height: 42%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tile.site .cards img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+  .where { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 6px; color: var(--muted); font-size: 12px; text-align: center; }
+  @media (max-width: 900px) { .where { display: none; } }
+
+  /* The bar we built (option 1), same sizes as the theme */
+  button { font: inherit; color: inherit; cursor: pointer; border: 0; padding: 0; background: none; }
+  .pill { position: absolute; right: 16px; bottom: 16px; display: flex; align-items: center; gap: 10px; padding: 6px 18px 6px 6px; border-radius: 999px; color: #fff; background: rgb(20 27 64 / .94); text-align: left; box-shadow: 0 8px 20px rgb(0 0 0 / .25), inset 0 0 0 1px rgb(255 255 255 / .08); }
+  .pill:focus-visible { outline: 2px solid var(--sky); outline-offset: 3px; }
+  .disc { position: relative; flex: none; width: 40px; height: 40px; }
+  .rec { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, transparent 0 33%, rgb(255 255 255 / .1) 34% 35%, transparent 36%), repeating-radial-gradient(circle, #111 0 1.5px, #1e1e1e 1.5px 3px); }
+  .rec::before { content: ""; position: absolute; inset: 31%; border-radius: 50%; background: #1c2a68 url(img/logo-loss-white.png) center / 72% no-repeat; }
+  .disc::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(from 20deg, transparent 0 18%, rgb(255 255 255 / .18) 24%, transparent 30% 68%, rgb(255 255 255 / .1) 74%, transparent 80%); }
+  .txt { line-height: 1.35; text-transform: uppercase; white-space: nowrap; }
+  .txt small { display: block; font-size: 9px; font-weight: 600; letter-spacing: .16em; opacity: .6; }
+  .txt b { display: block; font-size: 12px; font-weight: 600; letter-spacing: .06em; }
+  .eq { display: flex; align-items: flex-end; gap: 2px; height: 14px; margin-left: 4px; }
+  .eq i { width: 2.5px; height: 100%; border-radius: 1px; background: currentColor; transform-origin: bottom; transform: scaleY(.25); }
+  .txt .on, [data-on] .txt .off { display: none; }
+  [data-on] .txt .on { display: block; }
+  [data-on] .rec { animation: spin 3s linear infinite; }
+  [data-on] .eq i { animation: eq .9s ease-in-out infinite alternate; }
+  .eq i:nth-child(2) { animation-duration: .7s !important; animation-delay: -.3s !important; }
+  .eq i:nth-child(3) { animation-duration: 1.1s !important; animation-delay: -.5s !important; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes eq { from { transform: scaleY(.2); } to { transform: scaleY(1); } }
+
+  /* 1. Thin white border */
+  .v1 .pill { box-shadow: 0 8px 20px rgb(0 0 0 / .25), inset 0 0 0 1px rgb(255 255 255 / .45); }
+
+  /* 2. Double ring: a gap then a faint outer ring, like a frame around it */
+  .v2 .pill { box-shadow: 0 0 0 3px rgb(20 27 64 / .94), 0 0 0 4px rgb(255 255 255 / .55), 0 8px 20px rgb(0 0 0 / .3); }
+
+  /* 3. Soft sky-blue glow */
+  .v3 .pill { box-shadow: 0 0 0 1px rgb(74 155 240 / .5), 0 0 22px rgb(74 155 240 / .45), 0 8px 20px rgb(0 0 0 / .25); }
+
+  /* 4. Gradient from the announcement bar */
+  .v4 .pill { background: linear-gradient(100deg, #4a9bf0, #2e3180 70%, #0b0d47); }
+
+  /* 5. White pill */
+  .v5 .pill { background: #fff; color: #0b0d47; box-shadow: 0 8px 22px rgb(0 0 0 / .28); }
+
+  /* 6. Cream pill */
+  .v6 .pill { background: var(--cream); color: #0b0d47; box-shadow: 0 8px 22px rgb(0 0 0 / .28), inset 0 0 0 1.5px #0b0d47; }
+
+  /* 7. Frosted glass, same feel as the filters bar on collection pages */
+  .v7 .pill { background: rgb(255 255 255 / .16); -webkit-backdrop-filter: blur(14px) saturate(1.4); backdrop-filter: blur(14px) saturate(1.4); box-shadow: 0 8px 24px rgb(0 0 0 / .25), inset 0 0 0 1px rgb(255 255 255 / .35); text-shadow: 0 1px 2px rgb(0 0 0 / .25); }
+  .v7 .tile.light .pill { background: rgb(11 13 71 / .35); }
+
+  /* 8. Light running around the edge while playing */
+  .v8 .pill { isolation: isolate; box-shadow: 0 8px 20px rgb(0 0 0 / .25); }
+  .v8 .pill::before { content: ""; position: absolute; inset: -1.5px; z-index: -1; border-radius: inherit; padding: 1.5px; background: rgb(255 255 255 / .35); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .v8 [data-on] .pill::before, .v8[data-on] .pill::before { background: conic-gradient(from var(--a, 0deg), transparent 0 55%, #4a9bf0 75%, #fff 85%, transparent 95%); animation: edge 2.4s linear infinite; }
+  @property --a { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+  @keyframes edge { to { --a: 360deg; } }
+
+  /* 9. Bigger record that sticks out of the pill */
+  .v9 .pill { padding-left: 54px; height: 40px; }
+  .v9 .disc { position: absolute; left: -10px; top: 50%; width: 56px; height: 56px; margin-top: -28px; border-radius: 50%; box-shadow: 0 0 0 2px rgb(255 255 255 / .85), 0 6px 16px rgb(0 0 0 / .35); }
+  .v9 .pill { right: 22px; }
+
+  /* 10. Changes with what's behind it: white over dark, navy over light */
+  .v10 .tile.hero .pill, .v10 .tile.site .pill { background: #fff; color: #0b0d47; }
+
+  /* 11. A ring pings around it a few times until someone plays it */
+  .v11 .pill::after { content: ""; position: absolute; inset: 0; border-radius: inherit; border: 1.5px solid #fff; opacity: 0; animation: ping 2.8s ease-out infinite; }
+  .v11[data-on] .pill::after { animation: none; }
+  @keyframes ping { 0% { opacity: .7; transform: scale(1); } 45%, 100% { opacity: 0; transform: scale(1.18, 1.5); } }
+
+  /* 12. Lighter navy (the theme's border color) with a border */
+  .v12 .pill { background: #2e3180; box-shadow: 0 8px 20px rgb(0 0 0 / .3), inset 0 0 0 1px rgb(255 255 255 / .3); }
+
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
+</style>
+</head>
+<body>
+<audio id="song" src="../music-bar/song.mp3" preload="none" loop></audio>
+
+<header class="page">
+  <h1>إزاي نخلي شريط المزيكا يبان أكتر</h1>
+  <p>الشريط كحلي والموقع كحلي، فبيضيع. كل فكرة هنا معروضة على 3 خلفيات حقيقية من الموقع: فوق صورة الهيرو، وعلى خلفية الموقع الكحلي، وفوق صورة منتج فاتحة. دوس على أي شريط والأغنية هتشتغل.</p>
+</header>
+
+<main id="list"></main>
+
+<script>
+  const options = [
+    ['v0', '0. الحالي', 'للمقارنة', 'الكحلي اللي عندنا دلوقتي. فوق الصورة باين، بس على خلفية الموقع بيختفي تقريبا.'],
+    ['v1', '1. إطار أبيض رفيع', '', 'نفس الشريط بالظبط، بس حواليه خط أبيض رفيع شفاف شوية. أقل تغيير ممكن، وبيرسم حدود الشريط على الكحلي.'],
+    ['v2', '2. إطار مزدوج', '', 'مسافة صغيرة كحلي وبعدها خط أبيض، كأنه جوه برواز. أوضح من الخط الواحد وشكله متشطب أكتر.'],
+    ['v3', '3. نور أزرق خفيف', '', 'هالة زرقا هادية حواليه بلون السما اللي في شريط الإعلانات فوق. بيبان على الكحلي من غير ما يبقى أبيض صريح.'],
+    ['v4', '4. نفس تدرج شريط الإعلانات', '', 'الشريط ياخد نفس التدرج من الأزرق الفاتح للكحلي اللي فوق الموقع. كده الحتتين شبه بعض: واحدة فوق وواحدة تحت.'],
+    ['v5', '5. شريط أبيض', '', 'نعكس الألوان: شريط أبيض وكلام كحلي، والأسطوانة السودا باينة جواه. أوضح واحدة على الكحلي، وفوق الصور الفاتحة الضل بيفصله.'],
+    ['v6', '6. شريط كريمي', '', 'لون كريمي بإطار كحلي رفيع، زي ورق الكاسيت القديم. باين زي الأبيض بس أدفى وفيه روح قديمة تمشي مع الأسطوانة.'],
+    ['v7', '7. زجاج', '', 'شفاف ومغبش زي الإزاز، بنفس إحساس شريط الفلاتر اللي في صفحة الكوليكشن. بيبان على أي خلفية لأنه بياخد منها، والإطار الأبيض بيحدده.'],
+    ['v8', '8. نور بيلف على الحرف', '', 'وهو واقف: إطار أبيض خفيف. لما الأغنية تشتغل نور أزرق وأبيض يلف حوالين الحرف. الحركة بتلفت النظر بس وهو شغال بس.'],
+    ['v9', '9. الأسطوانة طالعة برا الشريط', '', 'الأسطوانة أكبر من الشريط وخارجة منه، وحواليها حلقة بيضا. الشكل نفسه بقى مختلف عن أي حاجة تانية في الصفحة، فالعين بتروحله.'],
+    ['v10', '10. بيغير لونه حسب اللي وراه', '', 'فوق الكحلي والصور الغامقة يبقى أبيض، وفوق الحاجات الفاتحة يرجع كحلي. دايما عكس الخلفية، بس محتاج شوية كود يعرف هو فوق إيه.'],
+    ['v11', '11. حلقة بتنبض لحد ما حد يشغله', '', 'دايرة بيضا رفيعة بتطلع منه كل كام ثانية وتختفي، زي ما بيقول "دوس عليا". أول ما حد يشغل الأغنية تقف خالص.'],
+    ['v12', '12. كحلي أفتح', '', 'نفس الفكرة بس بالكحلي الفاتح اللي في إطارات الموقع (#2e3180) وخط أبيض. لسه كحلي ومن نفس الألوان، بس مختلف عن الخلفية.'],
+  ];
+
+  const pill = '<button class="pill" data-toggle aria-pressed="false" aria-label="Play music"><span class="disc"><span class="rec"></span></span><span class="txt"><small class="off">PRESS PLAY</small><small class="on">NOW PLAYING</small><b>ENDING CREDITS</b></span><span class="eq"><i></i><i></i><i></i></span></button>';
+  const cards = ['002-short-sleeve-embroidered-tee', '006-dark-henley-sweater-long-sleeve', '001-long-sleeve-embroidered-tee']
+    .map((dir) => `<img src="img/${dir}.jpg" alt="" loading="lazy">`).join('');
+
+  document.getElementById('list').innerHTML = options.map(([cls, title, tag, text]) => `
+    <figure class="${cls}">
+      <div class="tiles">
+        <div class="tile hero">${pill}</div>
+        <div class="tile site"><div class="cards">${cards}</div>${pill}</div>
+        <div class="tile light">${pill}</div>
+      </div>
+      <div class="where"><span>فوق صورة الهيرو</span><span>على خلفية الموقع</span><span>فوق صورة منتج</span></div>
+      <figcaption><b>${title}${tag ? ` <span class="tag">${tag}</span>` : ''}</b><span>${text}</span></figcaption>
+    </figure>`).join('');
+
+  const audio = document.getElementById('song');
+  let current = null;
+
+  function setState(fig, on) {
+    fig.toggleAttribute('data-on', on);
+    for (const b of fig.querySelectorAll('[data-toggle]')) b.setAttribute('aria-pressed', String(on));
+  }
+
+  document.addEventListener('click', (event) => {
+    const toggle = event.target.closest('[data-toggle]');
+    if (!toggle) return;
+    const fig = toggle.closest('figure');
+
+    if (current === fig) {
+      setState(fig, false);
+      current = null;
+      audio.pause();
+      return;
+    }
+    if (current) setState(current, false);
+    current = fig;
+    setState(fig, true);
+    audio.play().catch(() => {});
+  });
+</script>
+</body>
+</html>
