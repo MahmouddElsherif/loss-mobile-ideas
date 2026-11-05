@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss Reviews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --site: #0b0d47; --site2: #2e3180; --accent: #2e3180; --soft: #e9ebf6; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --accent: #a9b6ff; --soft: #252b52; } }
+  :root[data-theme="dark"] { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --accent: #a9b6ff; --soft: #252b52; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.7 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  img, video { display: block; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  header.page { max-width: 1120px; margin: auto; padding: 32px 16px 4px; }
+  h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.3; }
+  header.page p { margin: 0; color: var(--muted); max-width: 720px; }
+  main { max-width: 1120px; margin: auto; padding: 16px 16px 48px; display: grid; gap: 22px; }
+  main > section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; min-width: 0; }
+  h2 { margin: 0 0 4px; font-size: 20px; line-height: 1.4; }
+  h3 { margin: 0 0 4px; font-size: 16px; line-height: 1.4; }
+  .lead { margin: 0 0 16px; color: var(--muted); max-width: 760px; }
+  main > section.answer { border-color: var(--accent); border-width: 2px; }
+  .answer > p { margin: 0; font-size: 16.5px; }
+  .test-note { background: var(--soft); border-radius: 10px; padding: 10px 14px; margin-top: 12px; font-size: 14px; }
+
+  .demo { display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: start; }
+  .demo-side ol { margin: 0; padding: 0; list-style: none; counter-reset: t; display: grid; gap: 12px; }
+  .demo-side li { counter-increment: t; position: relative; padding-inline-start: 36px; }
+  .demo-side li::before { content: counter(t); position: absolute; inset-inline-start: 0; top: 2px; width: 25px; height: 25px; border-radius: 50%; background: var(--soft); text-align: center; font-size: 13px; line-height: 25px; font-weight: 600; }
+  .demo-side b { display: block; }
+  .demo-side span { color: var(--muted); font-size: 14px; }
+  @media (max-width: 800px) { .demo { grid-template-columns: minmax(0, 1fr); } .phone { margin-inline: auto; } }
+
+  /* Store UI */
+  .phone { direction: ltr; text-align: left; position: relative; width: 100%; max-width: 330px; height: 640px; background: var(--site); color: #fff; border: 6px solid #05062a; border-radius: 28px; overflow: hidden; font-family: Geist, system-ui, sans-serif; font-size: 13px; line-height: 1.45; }
+  .scroll { height: 100%; overflow-y: auto; scrollbar-width: none; }
+  .scroll::-webkit-scrollbar { display: none; }
+  .bar { position: sticky; top: 0; z-index: 3; background: #fff; display: flex; align-items: center; justify-content: center; height: 42px; }
+  .bar img { height: 17px; }
+  .pdp-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+  .pad { padding: 14px; }
+  .p-title { font: 500 22px/1.2 "Playfair Display", Georgia, serif; }
+  .stars { letter-spacing: 1px; color: #fff; font-size: 12px; white-space: nowrap; }
+  .stars i { font-style: normal; opacity: .3; }
+  .rating-link { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: #fff; font-size: 12px; }
+  .rating-link u { text-underline-offset: 2px; opacity: .85; }
+  .sizes { display: flex; gap: 6px; margin: 14px 0; }
+  .sizes span { flex: 1; text-align: center; border: 1px solid #2e3180; padding: 7px 0; font-size: 12px; }
+  .sizes span.on { background: #fff; color: var(--site); }
+  .atc { display: block; width: 100%; background: #fff; color: var(--site); padding: 11px; text-align: center; font-weight: 500; }
+  .acc { border-bottom: 1px solid #2e3180; padding: 11px 0; display: flex; justify-content: space-between; }
+  .rv-sec { border-top: 1px solid #2e3180; padding: 22px 0 8px; }
+  .rv-h { font: 500 24px/1.2 "Playfair Display", Georgia, serif; padding: 0 14px; }
+  .rv-sum { display: flex; align-items: center; gap: 10px; padding: 8px 14px 12px; }
+  .rv-sum b { font: 500 26px/1 "Playfair Display", Georgia, serif; }
+  .rv-sum small { display: block; opacity: .72; font-size: 11.5px; }
+  .chips { display: flex; gap: 6px; padding: 0 14px 12px; }
+  .chip { border: 1px solid #2e3180; padding: 4px 11px; border-radius: 99px; font-size: 11.5px; }
+  .chip[aria-pressed="true"] { background: #fff; color: var(--site); border-color: #fff; }
+  .strip { display: flex; align-items: flex-start; gap: 8px; overflow-x: auto; padding: 0 14px 6px; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .strip::-webkit-scrollbar { display: none; }
+  .rv-card { flex: 0 0 68%; min-width: 0; scroll-snap-align: center; text-align: left; display: block; }
+  .thumb { position: relative; aspect-ratio: 4/5; overflow: hidden; background: #2e3180; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .play { position: absolute; left: 8px; bottom: 8px; width: 28px; height: 28px; border-radius: 50%; background: rgba(11,13,71,.72); display: grid; place-items: center; }
+  .play::after { content: ""; border-left: 9px solid #fff; border-top: 5.5px solid transparent; border-bottom: 5.5px solid transparent; margin-left: 2px; }
+  .example { position: absolute; top: 7px; right: 7px; background: rgba(11,13,71,.72); color: #fff; font-size: 10px; padding: 1px 6px; font-family: system-ui, Tahoma, sans-serif; }
+  .rv-text { margin: 7px 0 3px; font-size: 12.5px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .rv-meta { font-size: 11px; opacity: .72; }
+  .rv-list { padding: 14px 14px 0; }
+  .rv-row { border-top: 1px solid #2e3180; padding: 12px 0; }
+  .rv-row p { margin: 5px 0; font-size: 12.5px; line-height: 1.55; }
+  .ol-btn { display: block; width: calc(100% - 28px); margin: 8px 14px 20px; border: 1px solid #fff; padding: 10px; text-align: center; font-weight: 500; }
+  .also { padding: 16px 14px 20px; }
+  .also-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .also-grid img { width: 100%; aspect-ratio: 4/5; object-fit: cover; }
+
+  .viewer, .form { position: absolute; inset: 0; z-index: 6; background: #05062a; display: none; flex-direction: column; }
+  .viewer.open, .form.open { display: flex; }
+  .v-media { position: relative; flex: 1; min-height: 0; background: #000; }
+  .v-media img, .v-media video { width: 100%; height: 100%; object-fit: cover; }
+  .x { position: absolute; top: 10px; right: 10px; z-index: 2; width: 32px; height: 32px; border-radius: 50%; background: rgba(11,13,71,.72); color: #fff; font-size: 18px; line-height: 1; }
+  .nav { position: absolute; top: 40%; width: 32px; height: 32px; border-radius: 50%; background: rgba(11,13,71,.72); z-index: 2; font-size: 16px; }
+  .prev { left: 8px; } .next { right: 8px; }
+  .v-info { background: var(--site); padding: 12px 14px 14px; }
+  .v-info p { margin: 5px 0; font-size: 13px; }
+  .v-shop { display: block; margin-top: 9px; border: 1px solid #fff; color: #fff; padding: 8px; text-align: center; font-size: 12.5px; width: 100%; }
+  .form { background: var(--site); overflow-y: auto; padding: 14px; gap: 10px; }
+  .form-body { display: grid; gap: 10px; }
+  .form label { font-size: 12px; opacity: .85; display: block; margin-bottom: 4px; }
+  .form input, .form textarea, .form select { width: 100%; background: transparent; border: 1px solid #2e3180; color: #fff; padding: 8px; font: inherit; }
+  .form select option { color: #000; }
+  .pick { display: flex; gap: 2px; font-size: 22px; }
+  .pick button { opacity: .3; color: #fff; } .pick button.on { opacity: 1; }
+  .upload { display: block; border: 1px dashed #5f62ac; padding: 14px; text-align: center; font-size: 12px; }
+  .sent { text-align: center; margin: auto 0; display: none; }
+  .home-hero { aspect-ratio: 1/1; }
+  .home-hero img { width: 100%; height: 100%; object-fit: cover; }
+
+  .desk { direction: ltr; text-align: left; background: var(--site); color: #fff; border: 6px solid #05062a; border-radius: 12px; padding: 22px; font-family: Geist, system-ui, sans-serif; overflow: hidden; font-size: 13px; }
+  .desk-top { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .desk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  @media (max-width: 640px) { .desk { padding: 14px; } .desk-grid { grid-template-columns: repeat(2, 1fr); } }
+
+  .where { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .where { grid-template-columns: minmax(0, 1fr); } }
+  .stack { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+  .stack li { border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; font-size: 14px; color: var(--muted); }
+  .stack li.new { background: var(--accent); border-color: var(--accent); color: var(--card); font-weight: 600; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .box { border: 1px solid var(--line); border-radius: 10px; padding: 14px; min-width: 0; }
+  .box p { margin: 0; font-size: 14px; color: var(--muted); }
+  .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .photos figure { margin: 0; }
+  .photos img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: 8px; }
+  .photos figcaption { font-size: 13.5px; padding-top: 6px; line-height: 1.5; }
+  .photos figcaption b { display: block; }
+  .photos figcaption span { color: var(--muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 14px 0 0; list-style: none; }
+  .tags li { background: var(--soft); border-radius: 8px; padding: 5px 11px; font-size: 13.5px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 22px; }
+  .steps li { position: relative; background: var(--soft); border-radius: 8px; padding: 10px; font-size: 13.5px; line-height: 1.5; }
+  .steps li b { display: block; font-size: 14px; }
+  .steps li:not(:last-child)::after { content: "←"; position: absolute; inset-inline-end: -19px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+  @media (max-width: 860px) {
+    .steps { grid-auto-flow: row; gap: 18px; }
+    .steps li:not(:last-child)::after { content: "↓"; inset-inline-end: auto; inset-inline-start: 50%; top: auto; bottom: -21px; transform: none; }
+  }
+  .rules, .asks { margin: 12px 0 0; padding-inline-start: 20px; display: grid; gap: 8px; }
+  .asks li b { display: block; }
+  .asks li span { color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>ريفيوز العملاء في موقع Loss</h1>
+  <p>سكشن يعرض رأي الناس اللي اشترت، بصورهم وفيديوهاتهم، عشان اللي بيتفرج يطمن ويشوف اللبس على ناس حقيقية.</p>
+</header>
+<main>
+  <section class="answer">
+    <p><b>الفكرة باختصار:</b> الريفيوز هتتحط في صفحة كل منتج تحت معلومات المنتج، ومعاها شريط صغير في الصفحة الرئيسية. الصور والفيديوهات كلها هتظهر بنفس المقاس وبألوان الموقع، والعميل يفتح أي واحدة منها بدوسة.</p>
+    <div class="test-note"><b>مهم:</b> كل الأسماء والكلام والتقييمات والصور والفيديوهات في الصفحة دي <b>مثال للتجربة بس</b>، ومفيش منها ريفيو حقيقي. الصور والفيديوهات من اللي عندنا للمنتجات، وهيتشالوا كلهم قبل الشغل الفعلي.</div>
+  </section>
+
+  <section>
+    <h2>جرب صفحة المنتج</h2>
+    <p class="lead">الموبايل ده بيشتغل. انزل فيه ودوس على الصور والفيديوهات. في الموقع الحقيقي كل منتج هيظهر تحته ريفيوزه هو بس، إنما هنا المنتجات مخلوطة عشان التجربة.</p>
+    <div class="demo">
+      <div class="phone" id="pdp"></div>
+      <div class="demo-side">
+        <ol>
+          <li><b>النجوم تحت اسم المنتج</b><span>سطر صغير فيه التقييم وعدد الريفيوز. لما تدوس عليه ينزلك للسكشن.</span></li>
+          <li><b>ملخص التقييم</b><span>متوسط النجوم وعدد الريفيوز، وبيتحسبوا لوحدهم.</span></li>
+          <li><b>الفلاتر</b><span>الكل، أو الصور بس، أو الفيديوهات بس.</span></li>
+          <li><b>شريط الصور والفيديوهات</b><span>بيتسحب بالعرض، والكارت اللي بعده باين شوية عشان يبان إن فيه تكملة.</span></li>
+          <li><b>الفيديو</b><span>بيبان كصورة عليها علامة تشغيل، ومش بيشتغل غير لما العميل يدوس عليه، عشان الصفحة تفضل خفيفة وهادية.</span></li>
+          <li><b>الآراء المكتوبة</b><span>مش كل الناس هتبعت صورة، فالكلام لوحده ليه مكان تحت الشريط.</span></li>
+          <li><b>Write a review</b><span>دوس عليه جوه الموبايل وشوف شكل الفورم. ده مثال، ومش بيبعت حاجة.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>جرب شريط الصفحة الرئيسية</h2>
+    <p class="lead">هنا الناس لسه بتتعرف على البراند، فالشريط بيوريهم اللبس على ناس بسرعة من غير ما ياخد مساحة كبيرة. جوه كل ريفيو فيه زرار يوديهم لصفحة المنتج.</p>
+    <div class="demo">
+      <div class="phone" id="home"></div>
+      <div class="demo-side">
+        <ol>
+          <li><b>مكانه</b><span>بعد قايمة المنتجات وقبل قصة الـ Handmade.</span></li>
+          <li><b>عدده</b><span>من 6 لـ 8 كروت بس، فيهم أحسن الصور والفيديوهات.</span></li>
+          <li><b>مين بيختارهم</b><span>إنتوا اللي بتختاروا اللي يظهر هنا، من الريفيوز الحقيقية.</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>شكله على الكمبيوتر</h2>
+    <p class="lead">نفس الكروت، بس 4 جنب بعض بدل الشريط اللي بيتسحب.</p>
+    <div class="desk" id="desk"></div>
+  </section>
+
+  <section>
+    <h2>المكان بالظبط</h2>
+    <p class="lead">اللون الغامق هو الجديد، والباقي موجود في الموقع زي ما هو.</p>
+    <div class="where">
+      <div class="box">
+        <h3>صفحة المنتج</h3>
+        <ul class="stack">
+          <li>شريط الأقسام</li>
+          <li>صور المنتج</li>
+          <li>اسم المنتج</li>
+          <li class="new">سطر النجوم</li>
+          <li>المقاسات والألوان وزرار الشراء</li>
+          <li class="new">سكشن الريفيوز</li>
+          <li>You may also like</li>
+          <li>روابط الأقسام</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3>الصفحة الرئيسية</h3>
+        <ul class="stack">
+          <li>الفيديو الرئيسي</li>
+          <li>شريط المنتجات</li>
+          <li>كروت الأقسام</li>
+          <li>Inspired by the fear of being average</li>
+          <li>قايمة المنتجات</li>
+          <li class="new">شريط الريفيوز</li>
+          <li>قصة الـ Handmade</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>شكل الصور اللي نطلبها</h2>
+    <p class="lead">مش محتاجين تصوير محترف. الصورة من موبايل عادي، في نور كويس، واللبس باين فيها. الصور دي بتوضح الزوايا بس، والصور الحقيقية هتبقى من العملاء.</p>
+    <div class="photos" id="photos"></div>
+    <ul class="tags">
+      <li>المقاس في الموقع: 4:5 بالطول</li>
+      <li>الفيديو: بالطول ومن 5 لـ 20 ثانية</li>
+      <li>ينفع من غير وش</li>
+      <li>من غير كولاج أو كتابة على الصورة</li>
+      <li>من غير سكرين شوت من الشات</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>الريفيوز هتيجي منين</h2>
+    <p class="lead">فيه طريقين: اللي عندكم دلوقتي عشان نبدأ بيه، واللي هييجي لوحده بعد فتح الموقع.</p>
+    <div class="grid2">
+      <div class="box"><h3>1. اللي عندكم دلوقتي</h3><p>صور ورسايل العملاء القدام من الواتساب والسوشيال. نستأذن كل واحد الأول، وناخد الصورة والكلام ونحطهم في الكارت.</p></div>
+      <div class="box"><h3>2. بعد فتح الموقع</h3><p>إيميل تلقائي يروح للعميل بعد ما الأوردر يوصله، ويطلب منه يقيم ويرفع صورة أو فيديو.</p></div>
+    </div>
+    <h3 style="margin-bottom:10px">رحلة الريفيو الجديد</h3>
+    <ol class="steps">
+      <li><b>الأوردر يوصل</b>العميل يستلم القطعة.</li>
+      <li><b>إيميل بعد كام يوم</b>بيطلب منه رأيه فيها.</li>
+      <li><b>يكتب ويرفع</b>نجوم وكلام، وصورة أو فيديو لو حابب.</li>
+      <li><b>المراجعة</b>حد من عندكم يشوفه من لوحة التحكم.</li>
+      <li><b>يظهر في الموقع</b>تحت المنتج، وعليه Verified buyer.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>القواعد اللي هنمشي عليها</h2>
+    <ul class="rules">
+      <li><b>كل الريفيوز حقيقية.</b> مفيش كلام نكتبه من عندنا، ولا صور عملاء معمولة بالذكاء الاصطناعي.</li>
+      <li><b>الموافقة قبل النشر.</b> أي صورة قديمة لعميل مننشرهاش غير لما يوافق.</li>
+      <li><b>Verified buyer للي اتأكدنا إنه اشترى بس.</b> الريفيوز القديمة تتنشر من غير العلامة دي، إلا لو قدرنا نربطها بأوردر فعلي.</li>
+      <li><b>الريفيو السلبي مش بيتمسح عشان سلبي.</b> بنشيل بس الإساءة أو الكلام اللي ملوش علاقة بالمنتج، وبنرد على الشكوى ونحلها.</li>
+      <li><b>الخصم مقابل الرأي، مش مقابل المدح.</b> لو عملنا هدية، تبقى لأي حد يبعت رأيه بصدق، مهما كان تقييمه.</li>
+      <li><b>منظهرش السكشن وهو شبه فاضي.</b> نبدأ لما يبقى عندنا 6 ريفيوز حقيقية على الأقل.</li>
+    </ul>
+  </section>
+
+  <section class="answer">
+    <h2>محتاجين منكم</h2>
+    <ol class="asks">
+      <li><b>عندكم كام صورة أو فيديو أو رسالة من عملاء قدام؟</b><span>لو تقدروا تبعتوها في فولدر واحد، نشوف هنقدر نبدأ بكام ريفيو.</span></li>
+      <li><b>هتقدروا تستأذنوا أصحابها؟</b><span>رسالة واتساب قصيرة لكل عميل تكفي.</span></li>
+      <li><b>هتدوا حاجة مقابل الرأي؟</b><span>زي خصم صغير على الأوردر الجاي، وقولولنا نسبته كام لو موافقين.</span></li>
+      <li><b>مين هيراجع الريفيوز الجديدة؟</b><span>محتاجين شخص من عندكم يفتح لوحة التحكم ويوافق عليها أول بأول.</span></li>
+    </ol>
+  </section>
+</main>
+
+<script>
+const R = [
+  { type:'video', src:'video/navy-tee.mp4', img:'img/navy-tee-poster.jpg', name:'سارة م.', stars:5, size:'M', product:'Long Sleeve Embroidered Tee', text:'القماشة تقيلة والتطريز نضيف جدًا. لبسته أكتر من مرة ولسه زي ما هو.' },
+  { type:'photo', img:'img/yellow-henley.jpg', name:'ندى ع.', stars:5, size:'S', product:'Light Henley Short Sleeve', text:'المقاس مظبوط واللون أحلى من الصور كمان.' },
+  { type:'video', src:'video/navy-tee-2.mp4', img:'img/navy-tee-2-poster.jpg', name:'مريم ح.', stars:5, size:'L', product:'Long Sleeve Embroidered Tee', text:'بقت أكتر حاجة بلبسها في الشتا، ومريحة جدًا.' },
+  { type:'photo', img:'img/red-henley.jpg', name:'هنا ك.', stars:4, size:'M', product:'Dark Henley Short Sleeve', text:'الخامة حلوة والدانتيل شكله رقيق. طلبت مقاسي العادي وطلع مظبوط.' },
+  { type:'photo', img:'img/snugz-egg.jpg', name:'ليلى س.', stars:5, size:'', product:'Breakfast Inspired Snugz', text:'الشغل اليدوي باين في كل تفصيلة، وكل الناس بتسألني جبتها منين.' },
+  { type:'video', src:'video/embroidery.mp4', img:'img/embroidery-poster.jpg', name:'يارا ن.', stars:5, size:'', product:'Embroidered Tee', text:'كنت عايزة أشوف التطريز من قريب، وطلع أنضف مما توقعت.' },
+  { type:'photo', img:'img/pink-long.jpg', name:'جنى ف.', stars:5, size:'S', product:'Light Henley Long Sleeve', text:'اللون هادي وبيتلبس مع أي جينز.' }
+];
+const WRITTEN = [
+  { name:'دينا ر.', stars:5, size:'M', text:'الأوردر وصل بسرعة والتغليف شيك.' },
+  { name:'سلمى أ.', stars:4, size:'L', text:'التيشيرت حلو جدًا، بس لو بتحبي اللبس الواسع خدي مقاس أكبر.' }
+];
+const stars = n => `<span class="stars" aria-label="${n} من 5">${'★'.repeat(n)}<i>${'★'.repeat(5 - n)}</i></span>`;
+const meta = r => `Verified buyer${r.size ? ' · Size ' + r.size : ''}`;
+const card = (r, i) => `<button class="rv-card" data-i="${i}" data-type="${r.type}" aria-label="افتح ريفيو ${r.name}">
+  <div class="thumb"><img src="${r.img}" alt="" loading="lazy"><span class="example">مثال</span>${r.type === 'video' ? '<span class="play"></span>' : ''}</div>
+  <div style="margin-top:7px">${stars(r.stars)}</div>
+  <div class="rv-text" dir="auto">${r.text}</div>
+  <div class="rv-meta"><span dir="auto">${r.name}</span> · ${r.product}</div>
+</button>`;
+const overlays = `<div class="viewer"><button class="x" data-close aria-label="إغلاق">×</button><button class="nav prev" aria-label="السابق">‹</button><button class="nav next" aria-label="التالي">›</button><div class="v-media"></div><div class="v-info"></div></div>
+<div class="form"><button class="x" data-close aria-label="إغلاق">×</button>
+  <div class="form-body">
+    <div class="p-title" style="padding-right:36px">Write a review</div>
+    <div><label>Your rating</label><div class="pick">${[1,2,3,4,5].map(n => `<button type="button" data-n="${n}" class="on" aria-label="${n}">★</button>`).join('')}</div></div>
+    <div><label>Your review</label><textarea rows="3" dir="auto" placeholder="قولنا رأيك في القطعة"></textarea></div>
+    <div><label>Size you bought</label><select><option>S</option><option selected>M</option><option>L</option><option>XL</option></select></div>
+    <div><label>Photo or video</label><span class="upload">اختار صورة أو فيديو من موبايلك</span></div>
+    <div><label>Name</label><input dir="auto" placeholder="اسمك"></div>
+    <button type="button" class="atc send">Submit review</button>
+    <div style="font-size:11px;opacity:.7;text-align:center">ده مثال، ومش هيتبعت حاجة</div>
+  </div>
+  <div class="sent"><div class="p-title">Thank you</div><p>في الموقع الحقيقي الريفيو هيوصل للمراجعة قبل ما يظهر.</p><button type="button" class="ol-btn" data-close style="width:100%;margin:8px 0">Close</button></div>
+</div>`;
+const bar = `<div class="bar"><img src="img/logo-navy.png" alt="Loss"></div>`;
+
+document.getElementById('pdp').innerHTML = `<div class="scroll">${bar}
+  <img class="pdp-img" src="img/yellow-henley-close.jpg" alt="">
+  <div class="pad">
+    <div class="p-title">Light Henley Sweater Short Sleeve</div>
+    <button class="rating-link" data-jump>${stars(5)}<u>4.8 (24 reviews)</u></button>
+    <div class="sizes"><span>S</span><span class="on">M</span><span>L</span><span>XL</span></div>
+    <span class="atc">Add to cart</span>
+    <div class="acc" style="margin-top:8px"><span>Details</span><span>+</span></div>
+    <div class="acc"><span>Size &amp; fit</span><span>+</span></div>
+  </div>
+  <section class="rv-sec" data-reviews>
+    <div class="rv-h">Worn by you</div>
+    <div class="rv-sum"><b>4.8</b><div>${stars(5)}<small>24 reviews · مثال</small></div></div>
+    <div class="chips"><button class="chip" aria-pressed="true" data-f="all">All</button><button class="chip" aria-pressed="false" data-f="photo">Photos</button><button class="chip" aria-pressed="false" data-f="video">Videos</button></div>
+    <div class="strip">${R.map(card).join('')}</div>
+    <div class="rv-list">${WRITTEN.map(r => `<div class="rv-row">${stars(r.stars)}<p dir="auto">${r.text}</p><div class="rv-meta"><span dir="auto">${r.name}</span> · ${meta(r)}</div></div>`).join('')}</div>
+    <button class="ol-btn" data-form>Write a review</button>
+  </section>
+  <div class="also" style="border-top:1px solid #2e3180"><div class="rv-h" style="padding:0;font-size:20px">You may also like</div><div class="also-grid"><img src="img/chemise.jpg" alt="" loading="lazy"><img src="img/black-drop.jpg" alt="" loading="lazy"></div></div>
+</div>${overlays}`;
+
+document.getElementById('home').innerHTML = `<div class="scroll">${bar}
+  <div class="also"><div class="rv-h" style="padding:0;font-size:20px">Shop all</div><div class="also-grid"><img src="img/white-tee.jpg" alt="" loading="lazy"><img src="img/chemise.jpg" alt="" loading="lazy"></div></div>
+  <section class="rv-sec" style="padding-bottom:22px">
+    <div class="rv-h" style="padding-bottom:12px">Worn by you</div>
+    <div class="strip">${R.map(card).join('')}</div>
+  </section>
+  <div class="home-hero"><img src="img/snugz-egg.jpg" alt="" loading="lazy"></div>
+  <div class="pad"><div class="p-title">Handmade</div><p dir="rtl" style="opacity:.75;margin:6px 0 0;text-align:right">قصة الـ Handmade زي ما هي في الموقع.</p></div>
+</div>${overlays}`;
+
+document.getElementById('desk').innerHTML = `<div class="desk-top"><div class="rv-h" style="padding:0">Worn by you</div><div style="display:flex;align-items:center;gap:8px"><b style="font:500 22px 'Playfair Display',serif">4.8</b>${stars(5)}<small style="opacity:.72">24 reviews · مثال</small></div></div>
+<div class="desk-grid">${[0, 1, 3, 4].map(i => card(R[i], i)).join('')}</div>`;
+
+const shots = [
+  ['img/yellow-henley.jpg', 'اللبس كله', 'في نور طبيعي، عشان القصة والمقاس يبانوا.'],
+  ['img/yellow-henley-close.jpg', 'من غير وش', 'مناسبة للي مش عايز يظهر.'],
+  ['img/white-tee.jpg', 'في مكان عادي', 'في أي مكان أو قدام المراية، زي اللبس اليومي.'],
+  ['img/snugz-egg.jpg', 'كلوز على التفاصيل', 'للتطريز والشغل اليدوي.']
+];
+document.getElementById('photos').innerHTML = shots.map(s => `<figure><img src="${s[0]}" alt="" loading="lazy"><figcaption><b>${s[1]}</b><span>${s[2]}</span></figcaption></figure>`).join('');
+
+document.querySelectorAll('.phone').forEach(phone => {
+  const viewer = phone.querySelector('.viewer'), form = phone.querySelector('.form');
+  const media = viewer.querySelector('.v-media'), info = viewer.querySelector('.v-info');
+  const body = form.querySelector('.form-body'), sent = form.querySelector('.sent');
+  let list = [], pos = 0;
+  const show = () => {
+    const r = R[list[pos]];
+    media.innerHTML = r.type === 'video'
+      ? `<video src="${r.src}" poster="${r.img}" autoplay loop muted playsinline></video>`
+      : `<img src="${r.img}" alt="">`;
+    info.innerHTML = `${stars(r.stars)} <span class="rv-meta" style="margin-inline-start:6px">مثال</span><p dir="auto">${r.text}</p><div class="rv-meta"><span dir="auto">${r.name}</span> · ${meta(r)}</div><button class="v-shop" type="button">View ${r.product}</button>`;
+  };
+  const closeAll = () => {
+    viewer.classList.remove('open'); form.classList.remove('open'); media.innerHTML = '';
+    body.style.display = ''; sent.style.display = '';
+  };
+  phone.addEventListener('click', e => {
+    const c = e.target.closest('.rv-card');
+    if (c) {
+      list = [...c.parentElement.querySelectorAll('.rv-card')].filter(x => x.style.display !== 'none').map(x => +x.dataset.i);
+      pos = list.indexOf(+c.dataset.i); viewer.classList.add('open'); show(); return;
+    }
+    if (e.target.closest('[data-close]')) { closeAll(); return; }
+    if (e.target.closest('.prev')) { pos = (pos - 1 + list.length) % list.length; show(); return; }
+    if (e.target.closest('.next')) { pos = (pos + 1) % list.length; show(); return; }
+    if (e.target.closest('[data-form]')) { form.classList.add('open'); return; }
+    if (e.target.closest('[data-jump]')) { phone.querySelector('.scroll').scrollTop = phone.querySelector('[data-reviews]').offsetTop - 42; return; }
+    const f = e.target.closest('[data-f]');
+    if (f) {
+      phone.querySelectorAll('[data-f]').forEach(b => b.setAttribute('aria-pressed', b === f));
+      phone.querySelectorAll('.strip .rv-card').forEach(k => { k.style.display = (f.dataset.f === 'all' || k.dataset.type === f.dataset.f) ? '' : 'none'; });
+      phone.querySelector('.strip').scrollLeft = 0; return;
+    }
+    const st = e.target.closest('.pick button');
+    if (st) { form.querySelectorAll('.pick button').forEach(b => b.classList.toggle('on', +b.dataset.n <= +st.dataset.n)); return; }
+    if (e.target.closest('.send')) { body.style.display = 'none'; sent.style.display = 'block'; }
+  });
+});
+document.querySelectorAll('#desk .rv-card').forEach(c => c.addEventListener('click', () => {
+  const p = document.getElementById('pdp');
+  p.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  p.querySelector(`.strip .rv-card[data-i="${c.dataset.i}"]`).click();
+}));
+</script>
+</body>
+</html>
