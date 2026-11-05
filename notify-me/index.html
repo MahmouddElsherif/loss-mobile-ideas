@@ -90,11 +90,12 @@
   .split .soldout { display: grid; place-items: center; padding: 0 4px; }
 
   /* 6: side tab */
-  .tab { position: absolute; right: 0; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; rotate: 180deg; display: flex; align-items: center; gap: 8px; padding: 14px 8px; font-size: 12px; font-weight: 500; z-index: 2; }
+  .tab { position: absolute; right: 0; top: 50%; translate: 0 -50%; writing-mode: vertical-rl; rotate: 180deg; display: flex; align-items: center; gap: 8px; padding: 14px 8px; font-size: 12px; font-weight: 500; z-index: 2; }
   .tab svg { rotate: 90deg; }
   .tab.old { background: #202223; color: var(--white); padding: 14px 10px; }
   .tab.new { background: var(--white); color: var(--navy); border-radius: 0 12px 12px 0; box-shadow: 0 4px 22px rgb(0 0 0 / .35); }
-  .phone .tab { top: 64px; padding-block: 10px; }
+  .phone .tab { padding-block: 10px; }
+  @media (max-width: 760px) { .music { display: none; } }
 
   /* 7: floating pill with the same ring as the music bar */
   .pill { position: absolute; left: 50%; bottom: 14px; translate: -50% 0; display: flex; align-items: center; gap: 7px; white-space: nowrap; background: var(--white); color: var(--navy); border-radius: 99px; padding: 9px 15px; font-size: 12px; font-weight: 500; box-shadow: 0 6px 24px rgb(0 0 0 / .4); z-index: 2; }
