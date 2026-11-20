@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss Reviews Look</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,500&family=Caveat:wght@500&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --site: #0b0d47; --site2: #2e3180; --soft: #e9ebf6; --ig: #0b1014; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --soft: #252b52; } }
+  :root[data-theme="dark"] { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --soft: #252b52; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.7 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  header.page { max-width: 1120px; margin: auto; padding: 32px 16px 4px; }
+  h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.3; }
+  header.page p { margin: 0; color: var(--muted); max-width: 760px; }
+  main { max-width: 1120px; margin: auto; padding: 16px 16px 48px; display: grid; gap: 22px; }
+  main > section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; min-width: 0; }
+  h2 { margin: 0 0 4px; font-size: 20px; line-height: 1.4; }
+  .lead { margin: 0 0 16px; color: var(--muted); max-width: 760px; }
+  .note { background: var(--soft); border-radius: 10px; padding: 10px 14px; font-size: 14px; }
+  .note + .note { margin-top: 8px; }
+  .num { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--site2); color: #fff; font-size: 14px; font-weight: 600; margin-inline-end: 8px; vertical-align: 2px; }
+
+  .demo { display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: start; }
+  @media (max-width: 800px) { .demo { grid-template-columns: minmax(0, 1fr); } .phone { margin-inline: auto; } }
+  .side ul { margin: 0; padding-inline-start: 18px; display: grid; gap: 8px; }
+  .side b { display: block; margin-bottom: 4px; }
+  .good { color: #23845a; } .bad { color: #b4472f; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .good { color: #6fd3a5; } :root:not([data-theme="light"]) .bad { color: #ff9f88; } }
+
+  /* Store UI inside the phone */
+  .phone { direction: ltr; text-align: left; position: relative; width: 100%; max-width: 330px; height: 640px; background: var(--site); color: #fff; border: 6px solid #05062a; border-radius: 28px; overflow: hidden; font-family: Geist, system-ui, sans-serif; font-size: 13px; line-height: 1.45; }
+  .scroll { height: 100%; overflow-y: auto; scrollbar-width: none; }
+  .scroll::-webkit-scrollbar { display: none; }
+  .bar { position: sticky; top: 0; z-index: 3; background: #fff; display: flex; align-items: center; justify-content: center; height: 42px; }
+  .bar img { height: 17px; }
+  .ctx { padding: 14px; opacity: .5; border-bottom: 1px solid var(--site2); font-size: 12px; }
+  .ctx-b { padding: 14px; opacity: .5; border-top: 1px solid var(--site2); font-size: 12px; }
+  .sec { padding: 22px 0 22px; }
+  .h { font: 500 24px/1.2 "Playfair Display", Georgia, serif; padding: 0 14px 4px; }
+  .sub { padding: 0 14px 12px; font-size: 12px; opacity: .72; }
+  .more { display: block; width: calc(100% - 28px); margin: 14px 14px 0; border: 1px solid #fff; padding: 9px; text-align: center; font-weight: 500; font-size: 12.5px; }
+
+  /* 1. Wall */
+  .wall { columns: 2; column-gap: 8px; padding: 0 14px; }
+  .wall button { display: block; width: 100%; margin-bottom: 8px; break-inside: avoid; border-radius: 12px; overflow: hidden; border: 1px solid var(--site2); background: var(--ig); }
+  .wall.cut button:nth-child(n + 9) { display: none; }
+
+  /* 2. Uniform strip */
+  .strip { display: flex; gap: 8px; overflow-x: auto; padding: 0 14px 4px; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .strip::-webkit-scrollbar { display: none; }
+  .shot { flex: 0 0 72%; aspect-ratio: 4 / 5; scroll-snap-align: start; position: relative; background: var(--ig); border: 1px solid var(--site2); display: grid; place-items: center; overflow: hidden; }
+  .shot img { width: 100%; max-height: 100%; object-fit: contain; }
+  .shot.light { background: #fbfbfb; }
+  .shot .open { position: absolute; right: 8px; bottom: 8px; background: rgba(11,13,71,.8); color: #fff; font-size: 10.5px; padding: 2px 8px; }
+
+  /* 3. Typed quotes */
+  .quotes { display: flex; gap: 8px; overflow-x: auto; padding: 0 14px 4px; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .quotes::-webkit-scrollbar { display: none; }
+  .q { flex: 0 0 78%; scroll-snap-align: start; border: 1px solid var(--site2); padding: 16px 16px 14px; display: flex; flex-direction: column; min-height: 230px; text-align: start; }
+  .q::before { content: "\201C"; font: 500 46px/0.6 "Playfair Display", Georgia, serif; opacity: .5; margin-bottom: 6px; }
+  .q p { margin: 0; font-size: 14px; line-height: 1.55; flex: 1; }
+  .q p[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; text-align: right; }
+  .q .src { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; opacity: .72; }
+  .q .src u { text-underline-offset: 2px; }
+
+  /* 4. Chat thread */
+  .thread { margin: 0 14px; border: 1px solid var(--site2); }
+  .thread-top { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--site2); font-size: 12px; }
+  .thread-top img { height: 12px; filter: invert(1); }
+  .thread-top span { opacity: .65; margin-left: auto; }
+  .msgs { padding: 12px; display: grid; gap: 6px; max-height: 360px; overflow-y: auto; scrollbar-width: none; }
+  .msgs::-webkit-scrollbar { display: none; }
+  .b { justify-self: start; max-width: 86%; background: var(--site2); padding: 8px 12px; border-radius: 16px 16px 16px 4px; font-size: 12.5px; line-height: 1.45; }
+  .b[dir="rtl"] { justify-self: start; font-family: system-ui, Tahoma, sans-serif; }
+  .gap { height: 6px; }
+  .b.photo { padding: 0; overflow: hidden; width: 60%; }
+  .b.photo img { aspect-ratio: 4/5; object-fit: cover; width: 100%; }
+  .me { justify-self: end; background: #fff; color: var(--site); border-radius: 16px 16px 4px 16px; }
+
+  /* 5. Ticker */
+  .ticker { overflow: hidden; padding: 4px 0; mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .row { display: flex; gap: 8px; width: max-content; animation: slide 70s linear infinite; padding: 4px 0; }
+  .row.rev { animation-direction: reverse; animation-duration: 80s; }
+  .ticker:hover .row { animation-play-state: paused; }
+  .pill { border: 1px solid var(--site2); border-radius: 99px; padding: 7px 14px; font-size: 13px; white-space: nowrap; }
+  .pill[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .row { animation: none; } }
+
+  .round2 { border: 2px solid var(--site2) !important; }
+  .round2 > h2 { font-size: 22px; }
+
+  /* 6. Scrapbook */
+  .book { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 12px; padding: 8px 18px 4px; align-items: start; }
+  .cut { display: block; align-self: start; position: relative; background: #fff; padding: 6px; box-shadow: 0 6px 14px rgba(0,0,0,.35); transform: rotate(var(--r)); transition: transform .25s ease; }
+  .cut:hover { transform: rotate(0) scale(1.03); z-index: 2; }
+  .cut img { width: 100%; }
+  .cut.pol { padding: 6px 6px 26px; }
+  .cut.pol img { aspect-ratio: 4/5; object-fit: cover; }
+  .cut .hand { position: absolute; left: 0; right: 0; bottom: 3px; text-align: center; font: 500 16px/1 Caveat, cursive; color: #0b0d47; }
+  .tape { position: absolute; top: -9px; left: 50%; width: 46px; height: 16px; margin-left: -23px; background: rgba(233, 222, 190, .82); transform: rotate(calc(var(--r) * -2)); }
+  .book .wide { grid-column: span 2; width: 82%; justify-self: center; }
+
+  /* 7. Hang tags */
+  .rail { position: relative; padding: 0 14px; }
+  .rail::before { content: ""; position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: #c9cfdf; opacity: .6; }
+  .tags { display: flex; gap: 10px; overflow-x: auto; padding: 6px 2px 18px; scrollbar-width: none; align-items: flex-start; }
+  .tags::-webkit-scrollbar { display: none; }
+  .tag { flex: 0 0 150px; display: flex; flex-direction: column; align-items: center; transform-origin: 50% 0; animation: sway 6s ease-in-out infinite; animation-delay: var(--d); }
+  .tag .str { width: 1.5px; height: var(--h); background: #c9cfdf; }
+  .tag .card { position: relative; width: 100%; background: #f3efe6; color: #0b0d47; padding: 30px 12px 12px; text-align: start; clip-path: polygon(20% 0, 80% 0, 100% 14px, 100% 100%, 0 100%, 0 14px); }
+  .tag .card::before { content: ""; position: absolute; top: 9px; left: 50%; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: var(--site); box-shadow: inset 0 0 0 1.5px #c9cfdf; }
+  .tag .card p { margin: 0 0 10px; font-size: 12.5px; line-height: 1.45; }
+  .tag .card p[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; text-align: right; }
+  .tag .card img { height: 12px; margin-top: 4px; }
+  .tag .card small { display: flex; justify-content: space-between; align-items: center; font-size: 10px; opacity: .7; border-top: 1px dashed rgba(11,13,71,.35); padding-top: 6px; }
+  @keyframes sway { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+  @media (prefers-reduced-motion: reduce) { .tag { animation: none; } }
+
+  /* 8. Lock screen */
+  .lock { position: relative; margin: 0 14px; height: 430px; overflow: hidden; border-radius: 18px; background: #222 center / cover; }
+  .lock::before { content: ""; position: absolute; inset: 0; background: inherit; filter: blur(14px) brightness(.55); transform: scale(1.15); }
+  .lock-in { position: relative; padding: 18px 10px; color: #fff; }
+  .clock { text-align: center; font: 300 46px/1 Geist, system-ui, sans-serif; letter-spacing: -1px; }
+  .date { text-align: center; font-size: 12px; opacity: .8; margin: 4px 0 16px; }
+  .notes { display: grid; gap: 7px; }
+  .noti { display: grid; grid-template-columns: 30px 1fr; gap: 9px; text-align: start; background: rgba(245,245,250,.2); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 14px; padding: 9px 11px; opacity: 0; transform: translateY(-12px) scale(.96); transition: opacity .5s ease, transform .5s ease; }
+  .noti.in { opacity: 1; transform: none; }
+  .noti .ic { width: 30px; height: 30px; border-radius: 8px; background: #fff; display: grid; place-items: center; }
+  .noti .ic img { width: 22px; }
+  .noti b { display: flex; justify-content: space-between; font-size: 11.5px; }
+  .noti b span { font-weight: 400; opacity: .7; }
+  .noti p { margin: 1px 0 0; font-size: 11.5px; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .noti p[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; text-align: right; }
+  .replay { display: block; margin: 10px auto 0; font-size: 11.5px; text-decoration: underline; text-underline-offset: 2px; opacity: .75; }
+
+  /* 9. Receipt */
+  .receipt { margin: 0 22px; background: #fbfaf6; color: #1a1a1a; font: 11.5px/1.5 "Space Mono", ui-monospace, monospace; padding: 16px 14px 22px; position: relative; transform: rotate(-.6deg); box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+  .receipt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -8px; height: 8px; background: linear-gradient(-45deg, transparent 6px, #fbfaf6 0) 0 0 / 12px 8px, linear-gradient(45deg, transparent 6px, #fbfaf6 0) 0 0 / 12px 8px; }
+  .receipt .c { text-align: center; }
+  .receipt img { height: 16px; margin: 0 auto 6px; }
+  .receipt hr { border: 0; border-top: 1px dashed #999; margin: 9px 0; }
+  .receipt .ln { display: flex; justify-content: space-between; gap: 8px; }
+  .receipt .say { margin: 4px 0 0; }
+  .receipt .say[dir="rtl"] { font-family: system-ui, Tahoma, sans-serif; text-align: right; }
+  .receipt .stars { letter-spacing: 2px; }
+  .barcode { height: 34px; margin: 10px 8px 4px; background: repeating-linear-gradient(90deg, #111 0 2px, transparent 2px 4px, #111 4px 5px, transparent 5px 8px, #111 8px 11px, transparent 11px 12px); }
+  .receipt u { text-underline-offset: 2px; cursor: pointer; }
+
+  /* 10. Deck */
+  .deck { position: relative; height: 380px; margin: 4px 26px 0; }
+  .deck .card { position: absolute; inset: 0; display: grid; place-items: center; background: var(--ig); border: 1px solid var(--site2); border-radius: 14px; overflow: hidden; transition: transform .45s ease, opacity .45s ease; box-shadow: 0 10px 24px rgba(0,0,0,.4); cursor: grab; touch-action: pan-y; }
+  .deck .card.light { background: #fbfbfb; }
+  .deck .card img { width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
+  .deck .card.gone { transform: translateX(-130%) rotate(-14deg) !important; opacity: 0; }
+  .deck-ui { display: flex; justify-content: space-between; align-items: center; padding: 14px 26px 0; font-size: 12px; }
+  .deck-ui button { border: 1px solid #fff; padding: 6px 14px; font-size: 12px; }
+
+  /* 11. Stories */
+  .story { position: relative; margin: 0 14px; height: 400px; background: linear-gradient(160deg, #1a1d6b, #0b0d47 60%); border: 1px solid var(--site2); overflow: hidden; }
+  .bars { position: absolute; top: 8px; left: 8px; right: 8px; display: flex; gap: 3px; z-index: 2; }
+  .bars i { flex: 1; height: 2px; background: rgba(255,255,255,.3); overflow: hidden; }
+  .bars i b { display: block; height: 100%; width: 0; background: #fff; }
+  .story-top { position: absolute; top: 18px; left: 12px; right: 12px; display: flex; align-items: center; gap: 7px; font-size: 11.5px; z-index: 2; }
+  .story-top img { height: 11px; filter: invert(1); }
+  .story-top span { opacity: .6; }
+  .slide { position: absolute; inset: 0; padding: 60px 20px 50px; display: flex; flex-direction: column; justify-content: center; opacity: 0; transition: opacity .6s ease; }
+  .slide.on { opacity: 1; }
+  .slide p { margin: 0; font: italic 500 23px/1.3 "Playfair Display", Georgia, serif; }
+  .slide p[dir="rtl"] { font: 600 21px/1.6 system-ui, Tahoma, sans-serif; text-align: right; }
+  .slide mark { background: none; color: inherit; background-image: linear-gradient(#fff, #fff); background-size: 0 1.5px; background-position: 0 100%; background-repeat: no-repeat; transition: background-size .9s ease .5s; }
+  .slide.on mark { background-size: 100% 1.5px; }
+  .slide small { position: absolute; left: 20px; right: 20px; bottom: 18px; display: flex; justify-content: space-between; font-size: 11px; opacity: .7; }
+  .tap { position: absolute; top: 40px; bottom: 40px; width: 40%; z-index: 1; }
+  .tap.l { left: 0; } .tap.r { right: 0; }
+
+  /* Viewer */
+  dialog.viewer { border: 0; padding: 0; background: transparent; max-width: min(520px, 94vw); max-height: 92vh; }
+  dialog.viewer::backdrop { background: rgba(5,6,42,.85); }
+  dialog.viewer img { max-height: 86vh; width: auto; margin: auto; border-radius: 12px; }
+  dialog.viewer button { position: fixed; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; background: rgba(11,13,71,.85); color: #fff; font-size: 22px; }
+  .all { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .all button { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); background: var(--ig); position: relative; }
+  .all span { position: absolute; top: 6px; left: 6px; background: rgba(0,0,0,.6); color: #fff; font-size: 11px; padding: 0 6px; border-radius: 4px; }
+  .all .flag { outline: 3px solid #e0743a; }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>شكل ريفيوز الرسايل في موقع Loss</h1>
+  <p>الـ 21 سكرين شوت اللي بعتها، معروضين بـ 5 أشكال مختلفة جوه صفحة الموقع. كل موبايل هنا بيشتغل: اسحب ودوس على أي رسالة عشان تفتحها كبيرة.</p>
+</header>
+<main>
+  <section>
+    <div class="note"><b>قبل ما تتفرج:</b> شلت صورة البروفايل بتاعة كل عميل من على الشمال. والصورة رقم 18 فيها شتيمة بالإنجليزي، فمش ظاهرة في الأشكال تحت، وهتلاقيها في الآخر عليها علامة برتقاني.</div>
+    <div class="note">في الشكلين 3 و4 الكلام مكتوب من جديد بخط الموقع، ونقلته من الرسايل زي ما هو. الحاجة الوحيدة اللي عملتها إني قصّرت الرسايل الطويلة وحطيت مكان الجزء المشال "…".</div>
+  </section>
+
+  <section>
+    <h2><span class="num">1</span>جدار الرسايل</h2>
+    <p class="lead">السكرين شوتس زي ما هي، عمودين جنب بعض بأطوالهم الطبيعية. بيبان أول 8، والباقي يفتح بزرار.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">From your DMs</div><div class="sub">Real messages from people who ordered.</div>
+          <div class="wall cut" data-shots="all"></div>
+          <button class="more" data-uncut>See all messages</button></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">حقيقي جدًا، باين إنه من الشات بجد.</li>
+        <li class="good">أسهل حاجة، مش محتاج نكتب حاجة.</li>
+        <li class="bad">لون الشات الأسود مختلف عن الكحلي بتاع الموقع، والرسايل الطويلة بتاخد مساحة.</li>
+        <li class="bad">الصورة رقم 3 فاتحة (Light mode)، فبتبان مختلفة عن الباقي.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>شريط كروت بنفس المقاس</h2>
+    <p class="lead">كل سكرين شوت جوه كارت 4:5 بنفس مقاس كروت "Worn by you"، وبيتسحب بالعرض. الرسالة الطويلة بتصغر عشان تدخل في الكارت، وتتفتح كبيرة بدوسة.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">From your DMs</div><div class="sub">Tap a message to read it.</div>
+          <div class="strip" data-shots="strip"></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">منظم، وماشي مع شريط Worn by you بالظبط.</li>
+        <li class="good">مش بياخد غير سطر واحد في الصفحة.</li>
+        <li class="bad">الرسايل الطويلة بتصغر ومش بتتقري غير لما تتفتح.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>كروت مكتوبة بخط الموقع</h2>
+    <p class="lead">كلام العميل مكتوب بخط Loss جوه كارت هادي، وتحته "View message" بيفتح السكرين شوت الأصلي كدليل إن الكلام حقيقي.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">In your words</div><div class="sub">From messages you sent us on Instagram.</div>
+          <div class="quotes" data-quotes></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">أنضف شكل، وكله بألوان وخط الموقع.</li>
+        <li class="good">بيتقري بسهولة، وجوجل بيقدر يقرا الكلام كمان.</li>
+        <li class="good">السكرين شوت لسه موجود لو حد عايز يتأكد.</li>
+        <li class="bad">محتاج نكتب الكلام بإيدينا، ولازم ننقله زي ما هو من غير ما نغيّر فيه.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>شات بألوان Loss</h2>
+    <p class="lead">الرسايل مكتوبة على شكل فقاعات شات، بس بالكحلي بتاع الموقع بدل شكل إنستجرام. ومعاها صور العملاء اللي جت في الرسايل.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Our inbox lately</div><div class="sub">Messages after the order arrived.</div>
+          <div class="thread"><div class="thread-top"><img src="../reviews/img/logo-navy.png" alt="Loss"> Messages<span>Instagram</span></div><div class="msgs" data-chat></div></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">فيه روح البراند، وشكله زي ما الناس بتكلمكم بجد.</li>
+        <li class="good">بيتقري بسهولة وكله بألوان الموقع.</li>
+        <li class="bad">برضه محتاج نكتب الكلام بإيدينا.</li>
+        <li class="bad">بيتسحب جوه نفسه، وده على الموبايل ممكن يتلخبط مع سحب الصفحة.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>سطرين بيتحركوا ببطء</h2>
+    <p class="lead">جُمل قصيرة من الرسايل في سطرين بيتحركوا ببطء عكس بعض، وبيقفوا لما تقف عليهم. ينفع يتحطوا تحت الصفحة الرئيسية أو فوق الفوتر.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Heard in our DMs</div><div class="sub">Short lines from your messages.</div>
+          <div class="ticker"><div class="row" data-ticker="0"></div><div class="row rev" data-ticker="1"></div></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">خفيف وبياخد مساحة صغيرة.</li>
+        <li class="good">ينفع يتحط مع أي شكل من الأشكال اللي فوق.</li>
+        <li class="bad">فيه حركة، وده أقل هدوء من باقي الموقع.</li>
+        <li class="bad">الجمل مقصوصة من الرسايل، فمفيش رأي كامل.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="round2">
+    <h2>أفكار أكتر ابتكار</h2>
+    <p class="lead" style="margin:0">الأشكال من 6 لـ 11 بتاخد الرسايل لحاجات من عالم البراند نفسه: كارت الشكر اللي في الأوردر، التاج، الإيصال، والإنستجرام. وحاولت الحركة فيها تفضل هادية.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span>سكراب بوك</h2>
+    <p class="lead">الرسايل مقصوصة ومتلزقة بشريط لزق، وصور العملاء متحطة كبولارويد ومكتوب تحتها بخط إيد. ماشي مع فكرة الهاندميد والهدايا الصغيرة اللي في الأوردر.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Our wall of love</div><div class="sub">Cut out from your messages.</div>
+          <div class="book" data-book></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">دافي وفيه روح البراند والهاندميد.</li>
+        <li class="good">بيستخدم السكرين شوتس زي ما هي، فمش محتاج نكتب حاجة.</li>
+        <li class="bad">شكله مزدحم شوية لو حطينا رسايل كتير. الأحسن من 6 لـ 8.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">7</span>تاجز متعلقة</h2>
+    <p class="lead">كل رسالة مكتوبة على تاج كريمي متعلق بخيط زي تاج اللبس، وبيتهز بالراحة. نفس شكل التاج اللي في زرار "Shop handmade" في الموقع.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Tagged by you</div><div class="sub">Swipe through the rail.</div>
+          <div class="rail"><div class="tags" data-tags></div></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">فكرة خاصة بـ Loss ومش هتلاقيها في مواقع تانية.</li>
+        <li class="good">مربوط بتاج "Shop handmade" اللي موجود في الموقع أصلًا.</li>
+        <li class="bad">الكلام لازم يبقى قصير عشان التاج صغير.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">8</span>إشعارات على شاشة الموبايل</h2>
+    <p class="lead">شاشة قفل موبايل، والرسايل بتوصل عليها كإشعارات واحدة ورا التانية أول ما توصل للسكشن. كأنك شايف الإنبوكس بتاع البراند وهو بيتملي.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Meanwhile, our phone</div><div class="sub">What lands after an order arrives.</div>
+          <div class="lock" style="background-image:url(img/photo-19.jpg)"><div class="lock-in"><div class="clock">9:41</div><div class="date">Thursday, 19 November</div><div class="notes" data-notes></div><button class="replay" data-replay>Replay</button></div></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">ملفت ومختلف، والحركة بتحصل مرة واحدة بس.</li>
+        <li class="good">الإشعار بيتفتح بدوسة ويوريك الرسالة الأصلية.</li>
+        <li class="bad">الإشعار بيبان فيه سطرين بس من الرسالة.</li>
+        <li class="bad">شكل الإشعار شبه الآيفون، فممكن يتلخبط على حد إنه إشعار حقيقي على موبايله.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">9</span>إيصال الأوردر</h2>
+    <p class="lead">الريفيوز مطبوعة على إيصال ورق حراري. كل عميل له سطر فيه رأيه، من غير نجوم لأن الرسايل مفيهاش تقييم، وفي الآخر باركود وجملة "It's always their Loss".</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Delivered. Reviewed.</div><div class="sub">Printed from your messages.</div>
+          <div class="receipt" data-receipt></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">فكرة بتضحّك وبتتفتكر، والخط بتاعها مختلف عن باقي الموقع من غير ما يبوّظه.</li>
+        <li class="good">بيستحمل رسايل كتير تحت بعض.</li>
+        <li class="bad">محتاج نكتب الكلام بإيدينا، والإيصال الطويل بيطوّل الصفحة.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">10</span>كوتشينة رسايل</h2>
+    <p class="lead">السكرين شوتس فوق بعض زي ورق الكوتشينة. اسحب الكارت اللي فوق أو دوس "Next" يطير ويظهر اللي تحته.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Swipe the DMs</div><div class="sub">One message at a time.</div>
+          <div class="deck" data-deck></div>
+          <div class="deck-ui"><span data-deck-count></span><button data-deck-next>Next</button></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">بياخد مساحة ثابتة مهما كان عدد الرسايل.</li>
+        <li class="good">فيه لعب خفيف، والناس بتحب تسحب.</li>
+        <li class="bad">بتشوف رسالة واحدة بس في المرة.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">11</span>ستوري إنستجرام</h2>
+    <p class="lead">زي الستوري: رسالة واحدة بخط كبير، وبتعدّي لوحدها كل 6 ثواني، وفوق شرط بيبيّن الوقت. أهم كلمة في كل رسالة بيتحط تحتها خط. ودوس يمين أو شمال عشان تقلّب.</p>
+    <div class="demo">
+      <div class="phone"><div class="scroll"><div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+        <div class="ctx">… Shop all</div>
+        <div class="sec"><div class="h">Said to us</div><div class="sub">Tap the sides to skip.</div>
+          <div class="story" data-story><div class="bars" data-bars></div><div class="story-top"><img src="../reviews/img/logo-navy.png" alt="Loss"> Loss <span>· from DMs</span></div><button class="tap l" data-sp aria-label="Previous"></button><button class="tap r" data-sn aria-label="Next"></button></div></div>
+        <div class="ctx-b">Handmade …</div>
+      </div></div>
+      <div class="side"><ul>
+        <li class="good">قريب من المكان اللي الرسايل جت منه أصلًا (إنستجرام).</li>
+        <li class="good">الخط الكبير بيخلّي كل رسالة باينة لوحدها.</li>
+        <li class="bad">بيتحرك لوحده، وفيه ناس بتحب تقرا على راحتها. هيقف لو العميل داس عليه.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>كل السكرين شوتس بعد التعديل</h2>
+    <p class="lead">بالترتيب اللي في الفولدر. اللي عليها علامة برتقاني فيها شتيمة.</p>
+    <div class="all" data-all></div>
+  </section>
+</main>
+
+<dialog class="viewer" data-viewer><button type="button" aria-label="إغلاق" data-close>&times;</button><img alt="" data-viewer-img></dialog>
+
+<script>
+const N = 21, BAD = [18], LIGHT = [3];
+const pad = n => String(n).padStart(2, '0');
+const src = n => `img/${pad(n)}.jpg`;
+const shown = Array.from({ length: N }, (_, i) => i + 1).filter(n => !BAD.includes(n));
+
+const viewer = document.querySelector('[data-viewer]');
+const open = n => { viewer.querySelector('[data-viewer-img]').src = src(n); viewer.showModal(); };
+viewer.querySelector('[data-close]').onclick = () => viewer.close();
+viewer.addEventListener('click', e => { if (e.target === viewer) viewer.close(); });
+
+document.querySelectorAll('[data-shots]').forEach(box => {
+  const strip = box.dataset.shots === 'strip';
+  box.innerHTML = shown.map(n => strip
+    ? `<button class="shot${LIGHT.includes(n) ? ' light' : ''}" data-n="${n}"><img src="${src(n)}" alt="Customer message" loading="lazy"><span class="open">Open</span></button>`
+    : `<button data-n="${n}"><img src="${src(n)}" alt="Customer message" loading="lazy"></button>`).join('');
+});
+document.querySelector('[data-uncut]').onclick = e => { document.querySelector('.wall').classList.remove('cut'); e.target.remove(); };
+
+// Retyped from the screenshots, words unchanged; long ones shortened with "…".
+const QUOTES = [
+  { n: 1, t: "Hiii I just got my order and this is the best thing EVERR I've always wanted a Henley top and it's been soo hard to find and this is literally the most gorgeous thing EVERR thank you so so much 💗" },
+  { n: 6, rtl: true, t: "الاوردر وصل الحاجات تحفه موت بجددد وتجنن والماتريل تحفه بجد انا مبسوطه بيهم اوي وشكرا اوي علي الهديه 💕" },
+  { n: 3, t: "I really cannot believe that this a local brand … this is such a piece of art … the quality is sooo wow … please never stop making theseee 💗" },
+  { n: 8, t: "El order lesa waselll bgd bgd to7faa w el material khatera w el size mazbot thank you 3al gift bgd ❤️" },
+  { n: 11, rtl: true, t: "كنت خايفه من المقاس بس طلع واسع وحلو والخامه تحفه و بجد شكراً ع الهدية الكيوت دي 🥺 ❤️❤️❤️" },
+  { n: 16, t: "I don't usually write reviews but this is by far the best order I've ever received. … I love everything about this order. Thank you so much 🤍" },
+  { n: 9, rtl: true, t: "تحفه بجد خطير والحمد لله ال size طلع مظبوط كنت خايفه منه والكواليتي بتاعته تحفه" },
+  { n: 20, t: "My order just arrived and OMGGG! It's literally a piece of art 😭 I didn't expect it to fit this perfectly I love it sooo muchhh, absolutely obsessed! ❤️" }
+];
+document.querySelector('[data-quotes]').innerHTML = QUOTES.map(q =>
+  `<div class="q"><p dir="${q.rtl ? 'rtl' : 'ltr'}">${q.t}</p><div class="src"><span>via Instagram</span><button data-n="${q.n}"><u>View message</u></button></div></div>`).join('');
+
+const CHAT = [
+  ['So um i just received'], ['Like gosh im in love'], ['img', 18, '50% 40%'], ['Yall did a rly nice job'], ['gap'],
+  ['Hey girlyy i just got the order and i want to thank you so much bgadd tohfa starting from the packaging, material w el fitt w the cute little gift i am obsessed! 💕'],
+  ['Definitely not the last time waiting for more designs w tops already my new favourite local brand 💗'], ['gap'],
+  ['الاوردر وصل', 'rtl'], ['ال quality بجد حلوه و شكرا جدا علي الميداليه تحفه بجد ❤️', 'rtl'], ['gap'],
+  ['img', 19, '50% 55%'], ['hii el top tohfaa and the gift is so cute thank youu ❤️'], ['elena gilbert vibes awee'], ['gap'],
+  ['I got the order a few days ago! Its exactly the top I was looking for!! Thanks a lot!!!! 🤍'],
+  ['Thank you 🤍', 'me']
+];
+document.querySelector('[data-chat]').innerHTML = CHAT.map(m => {
+  if (m[0] === 'gap') return '<div class="gap"></div>';
+  if (m[0] === 'img') return `<div class="b photo"><img src="img/photo-${m[1]}.jpg" alt="Photo from a customer"></div>`;
+  return `<div class="b${m[1] === 'me' ? ' me' : ''}" dir="${m[1] === 'rtl' ? 'rtl' : 'ltr'}">${m[0]}</div>`;
+}).join('');
+
+const LINES = [
+  ['the quality is sooo wow', 'بجد تحفه تحفه', "I'M OBSESSED!!", 'el size mazbot', 'literally a piece of art', 'الخامه تحفه'],
+  ['my new favourite local brand', 'شكلو احسن بكتير وفيت على الجسم', 'the best order I\'ve ever received', 'مش آخر تعامل اكيد', 'Yall did a rly nice job', 'bgd to7fa']
+];
+document.querySelectorAll('[data-ticker]').forEach(row => {
+  const items = LINES[row.dataset.ticker].map(t => `<span class="pill" dir="auto">${t}</span>`).join('');
+  row.innerHTML = items + items;
+});
+
+document.querySelector('[data-all]').innerHTML = Array.from({ length: N }, (_, i) => i + 1).map(n =>
+  `<button data-n="${n}" class="${BAD.includes(n) ? 'flag' : ''}"><img src="${src(n)}" alt="" loading="lazy"><span>${n}</span></button>`).join('');
+
+document.addEventListener('click', e => { const b = e.target.closest('[data-n]'); if (b) open(+b.dataset.n); });
+
+/* 6. Scrapbook */
+const BOOK = [
+  { n: 1, r: -2.5 }, { p: 15, cap: 'the cat gift 🐱', n: 15, r: 3 },
+  { n: 6, r: 2 }, { n: 14, r: -1.5 },
+  { p: 10, cap: 'watermelon keychain', n: 10, r: -3 }, { n: 8, r: 2.5 },
+  { n: 20, r: -1, wide: true }, { p: 19, cap: 'elena gilbert vibes', n: 19, r: 2 }, { n: 11, r: -2 }
+];
+document.querySelector('[data-book]').innerHTML = BOOK.map(b => b.p
+  ? `<button class="cut pol" style="--r:${b.r}deg" data-n="${b.n}"><span class="tape"></span><img src="img/photo-${b.p}.jpg" alt=""><span class="hand">${b.cap}</span></button>`
+  : `<button class="cut${b.wide ? ' wide' : ''}" style="--r:${b.r}deg" data-n="${b.n}"><span class="tape"></span><img src="${src(b.n)}" alt="Customer message"></button>`).join('');
+
+/* 7. Hang tags (short lines, words unchanged) */
+const TAGS = [
+  { n: 13, t: "I'M OBSESSED!!" },
+  { n: 6, rtl: true, t: 'الاوردر وصل الحاجات تحفه موت بجددد وتجنن' },
+  { n: 1, t: 'this is literally the most gorgeous thing EVERR' },
+  { n: 8, t: 'w el material khatera w el size mazbot' },
+  { n: 7, rtl: true, t: 'شكلو في الحقيقه احسن بكتير وفيت على الجسم وحلو جدا' },
+  { n: 14, t: 'my new favourite local brand 💗' },
+  { n: 20, t: "It's literally a piece of art 😭" }
+];
+document.querySelector('[data-tags]').innerHTML = TAGS.map((t, i) =>
+  `<button class="tag" style="--h:${[26, 44, 18, 36, 28, 48, 22][i]}px;--d:-${i * 0.9}s" data-n="${t.n}"><span class="str"></span><span class="card"><p dir="${t.rtl ? 'rtl' : 'ltr'}">${t.t}</p><small><span>via Instagram</span><img src="../reviews/img/logo-navy.png" alt="Loss"></small></span></button>`).join('');
+
+/* 8. Lock screen notifications */
+const NOTES = [
+  { n: 19, t: 'hii el top tohfaa and the gift is so cute thank youu ❤️', w: 'now' },
+  { n: 5, t: "Heyyy i received my order a while ago and im in love with it!! Bgd to7fa and quality is amaznigg", w: '2m ago' },
+  { n: 9, rtl: true, t: 'تحفه بجد خطير والحمد لله ال size طلع مظبوط كنت خايفه منه', w: '9m ago' },
+  { n: 2, t: 'Heyy i have just received my order today W el matrial tohfa w el Keychain so cute', w: '21m ago' },
+  { n: 12, t: "I got the order a few days ago! Its exactly the top I was looking for!!", w: '1h ago' }
+];
+const notes = document.querySelector('[data-notes]');
+notes.innerHTML = NOTES.map(x => `<button class="noti" data-n="${x.n}"><span class="ic"><img src="../reviews/img/logo-navy.png" alt=""></span><span><b>Instagram · Loss <span>${x.w}</span></b><p dir="${x.rtl ? 'rtl' : 'ltr'}">${x.t}</p></span></button>`).join('');
+const playNotes = () => {
+  const items = [...notes.children];
+  items.forEach(el => el.classList.remove('in'));
+  items.forEach((el, i) => setTimeout(() => el.classList.add('in'), 500 + i * 900));
+};
+new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { playNotes(); o.disconnect(); } }, { threshold: .4 }).observe(notes);
+document.querySelector('[data-replay]').onclick = playNotes;
+
+/* 9. Receipt */
+const RECEIPT = [
+  { n: 3, item: 'BABY YELLOW HENLEY L/S', s: 5, t: "the quality is sooo wow I will never buy those shien ones again" },
+  { n: 1, item: 'HENLEY TOP', s: 5, t: 'the most gorgeous thing EVERR' },
+  { n: 11, item: 'ORDER DELIVERED', s: 5, rtl: true, t: 'كنت خايفه من المقاس بس طلع واسع وحلو والخامه تحفه' },
+  { n: 21, item: 'ORDER DELIVERED', s: 5, t: "the material the size it's all perfect … won't be the last time inshallah" },
+  { n: 17, item: 'ORDER DELIVERED', s: 5, t: 'Thank you bgd el order wsl wl packaging tohfa wl materials helwa awe' }
+];
+document.querySelector('[data-receipt]').innerHTML = `<div class="c"><img src="../reviews/img/logo-navy.png" alt="Loss">CUSTOMER RECEIPT<br>FROM INSTAGRAM DMS</div><hr>
+  ${RECEIPT.map((r, i) => `<div class="ln"><span>${r.item}</span><span>x1</span></div><div class="say" dir="${r.rtl ? 'rtl' : 'ltr'}">"${r.t}"</div><div class="ln" style="margin-top:4px;opacity:.6"><span>MSG #${String(i + 1).padStart(3, '0')}</span><u data-n="${r.n}">VIEW</u></div><hr>`).join('')}
+  <div class="ln"><b>MESSAGES</b><b>${RECEIPT.length}</b></div><div class="barcode"></div><div class="c">IT'S ALWAYS THEIR LOSS</div>`;
+
+/* 10. Deck */
+const deckIds = [1, 15, 6, 20, 13, 9, 3, 14, 19, 8];
+const deck = document.querySelector('[data-deck]');
+const count = document.querySelector('[data-deck-count]');
+let deckTop = 0;
+const layDeck = () => {
+  [...deck.children].forEach((c, i) => {
+    const d = (i - deckTop + deckIds.length) % deckIds.length;
+    c.classList.remove('gone');
+    c.style.zIndex = deckIds.length - d;
+    c.style.transform = d < 3 ? `translateY(${d * 10}px) scale(${1 - d * .04}) rotate(${[0, 3, -3][d]}deg)` : 'translateY(20px) scale(.92)';
+    c.style.opacity = d < 3 ? 1 : 0;
+  });
+  count.textContent = `${deckTop + 1} / ${deckIds.length}`;
+};
+deck.innerHTML = deckIds.map(n => `<div class="card${LIGHT.includes(n) ? ' light' : ''}" data-open="${n}"><img src="${src(n)}" alt="Customer message"></div>`).join('');
+const nextCard = () => {
+  const c = deck.children[deckTop];
+  c.classList.add('gone');
+  setTimeout(() => { deckTop = (deckTop + 1) % deckIds.length; layDeck(); }, 380);
+};
+document.querySelector('[data-deck-next]').onclick = nextCard;
+let sx = null;
+deck.addEventListener('pointerdown', e => { sx = e.clientX; });
+deck.addEventListener('pointerup', e => {
+  if (sx === null) return;
+  const dx = e.clientX - sx; sx = null;
+  if (Math.abs(dx) > 40) nextCard();
+  else open(+deck.children[deckTop].dataset.open);
+});
+layDeck();
+
+/* 11. Stories */
+const STORIES = [
+  { n: 3, t: 'I really cannot believe that this a <mark>local brand</mark> … this is such a piece of art' },
+  { n: 6, rtl: true, t: 'الاوردر وصل الحاجات <mark>تحفه موت</mark> بجددد وتجنن' },
+  { n: 16, t: "this is by far the <mark>best order</mark> I've ever received" },
+  { n: 8, t: 'w el material khatera w el size <mark>mazbot</mark>' },
+  { n: 15, t: "it's a sure thing that <mark>“it's always their LOSS”</mark> 🤍" }
+];
+const story = document.querySelector('[data-story]');
+const bars = story.querySelector('[data-bars]');
+bars.innerHTML = STORIES.map(() => '<i><b></b></i>').join('');
+story.insertAdjacentHTML('beforeend', STORIES.map(s => `<div class="slide"><p dir="${s.rtl ? 'rtl' : 'ltr'}">${s.t}</p><small><span>via Instagram</span><button data-n="${s.n}" style="z-index:3;position:relative;text-decoration:underline">View message</button></small></div>`).join(''));
+const slides = story.querySelectorAll('.slide');
+let si = 0, t0 = 0, raf = 0, paused = false;
+const DUR = 6000;
+const showStory = i => {
+  si = (i + STORIES.length) % STORIES.length;
+  slides.forEach((s, k) => s.classList.toggle('on', k === si));
+  bars.querySelectorAll('b').forEach((b, k) => { b.style.width = k < si ? '100%' : '0'; });
+  t0 = performance.now();
+};
+const tick = now => {
+  if (!paused) {
+    const p = Math.min(1, (now - t0) / DUR);
+    bars.querySelectorAll('b')[si].style.width = `${p * 100}%`;
+    if (p >= 1) showStory(si + 1);
+  } else t0 = now - (parseFloat(bars.querySelectorAll('b')[si].style.width) / 100) * DUR;
+  raf = requestAnimationFrame(tick);
+};
+story.querySelector('[data-sn]').onclick = () => showStory(si + 1);
+story.querySelector('[data-sp]').onclick = () => showStory(si - 1);
+story.addEventListener('pointerenter', () => (paused = true));
+story.addEventListener('pointerleave', () => (paused = false));
+showStory(0);
+raf = requestAnimationFrame(tick);
+</script>
+</body>
+</html>
