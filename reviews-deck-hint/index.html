@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loss Deck Hints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #f3f4f8; --card: #fff; --ink: #1c2a68; --muted: #5b6390; --line: #c9cfdf; --site: #0b0d47; --site2: #2e3180; --soft: #e9ebf6; --ig: #0b1014; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --soft: #252b52; } }
+  :root[data-theme="dark"] { --bg: #11152b; --card: #1a1f3a; --ink: #eef0fa; --muted: #a9b0d6; --line: #2c3460; --soft: #252b52; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.7 system-ui, "Segoe UI", Tahoma, sans-serif; }
+  img { display: block; max-width: 100%; }
+  button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  header.page { max-width: 1120px; margin: auto; padding: 32px 16px 4px; }
+  h1 { margin: 0 0 6px; font-size: 28px; line-height: 1.3; }
+  header.page p { margin: 0; color: var(--muted); max-width: 760px; }
+  main { max-width: 1120px; margin: auto; padding: 16px 16px 48px; display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 22px; }
+  main > section { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
+  h2 { margin: 0; font-size: 18px; line-height: 1.4; }
+  .num { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--site2); color: #fff; font-size: 13px; font-weight: 600; margin-inline-end: 6px; vertical-align: 2px; }
+  .lead { margin: 0; color: var(--muted); font-size: 14px; }
+
+  /* Store UI */
+  .phone { direction: ltr; text-align: left; position: relative; width: 100%; max-width: 330px; margin: 0 auto; height: 600px; background: var(--site); color: #fff; border: 6px solid #05062a; border-radius: 28px; overflow: hidden; font-family: Geist, system-ui, sans-serif; font-size: 13px; line-height: 1.45; }
+  .bar { background: #fff; display: flex; align-items: center; justify-content: center; height: 42px; }
+  .bar img { height: 17px; }
+  .sec { padding: 20px 0 0; }
+  .h { font: 500 23px/1.2 "Playfair Display", Georgia, serif; padding: 0 16px 4px; }
+  .sub { padding: 0 16px 16px; font-size: 12px; opacity: .72; }
+
+  .deck { position: relative; height: 360px; margin: 0 30px; }
+  .card { position: absolute; inset: 0; display: flex; flex-direction: column; background: var(--ig); border: 1px solid #262b45; border-radius: 16px; overflow: hidden; transition: transform .45s ease, opacity .45s ease; box-shadow: 0 12px 26px rgba(0,0,0,.45); cursor: grab; touch-action: pan-y; user-select: none; }
+  .card.light { background: #fff; color: #111; border-color: #ddd; }
+  .card.drag { transition: none; }
+  .head { display: flex; align-items: center; padding: 10px 13px; border-bottom: 1px solid rgba(255,255,255,.1); }
+  .light .head { border-bottom-color: #e6e6e6; }
+  .head svg { width: 16px; height: 16px; opacity: .85; }
+  .shot { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; }
+  .shot img { width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; }
+  .ui { display: flex; justify-content: center; align-items: center; gap: 12px; padding: 16px 30px 0; font-size: 12px; }
+  .next { border: 1px solid #fff; padding: 7px 18px; font-size: 12px; }
+  .hint { padding: 8px 30px 0; font-size: 11px; opacity: .55; text-align: center; }
+
+  /* 2. Peek: side-by-side strip */
+  .v-peek .deck { margin: 0; overflow: visible; }
+  .v-peek .card { width: 74%; left: 16px; right: auto; }
+
+  /* 3. Nudge hint */
+  .tip { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 6px; background: rgba(11,13,71,.85); border: 1px solid rgba(255,255,255,.25); padding: 5px 11px; border-radius: 99px; font-size: 11.5px; white-space: nowrap; opacity: 0; transition: opacity .4s ease; pointer-events: none; }
+  .tip.on { opacity: 1; }
+
+  /* 4. Avatar pile */
+  .pile { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 20px 0; }
+  .faces { display: flex; }
+  .faces img, .faces span { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--site); margin-left: -8px; object-fit: cover; }
+  .faces img:first-child { margin-left: 0; }
+  .faces img.on { border-color: #fff; transform: translateY(-3px); }
+  .pile small { font-size: 12px; opacity: .8; }
+
+  /* 5. Arrows */
+  .v-arrows .deck { margin: 0 46px; }
+  .arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 40; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,.5); display: grid; place-items: center; font-size: 18px; background: rgba(11,13,71,.6); }
+  .arrow.l { left: -42px; } .arrow.r { right: -42px; }
+
+  /* 6. Dashes */
+  .dashes { display: flex; justify-content: center; gap: 4px; padding: 16px 30px 0; }
+  .dashes i { width: 8px; height: 3px; border-radius: 3px; background: rgba(255,255,255,.3); transition: width .3s ease, background .3s ease; }
+  .dashes i.on { width: 22px; background: #fff; }
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>إزاي نبيّن إن فيه رسايل تانية ورا الكارت</h1>
+  <p>6 أشكال للكوتشينة اللي في الصفحة الرئيسية، وكل واحد فيهم شغال: دوس على الكارت للي بعده، واسحب شمال للي قبله. الحاجة الوحيدة اللي بتتغير بينهم هي إزاي اللي بيتفرج يعرف إن فيه كروت تانية.</p>
+</header>
+<main>
+  <section>
+    <h2><span class="num">1</span>كروت مفرودة ورا الكارت</h2>
+    <p class="lead">الكروت اللي ورا بتطلع من الجنبين أكتر وباين فيها جزء من الرسالة اللي بعدها، زي ورق كوتشينة مفرود في الإيد.</p>
+    <div class="phone v-fan" data-v="fan"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>الكارت اللي بعده باين على اليمين</h2>
+    <p class="lead">الكروت جنب بعض بدل ما تبقى فوق بعض، والكارت اللي بعده باين جزء منه على اليمين، فواضح إن فيه حاجة تتسحب.</p>
+    <div class="phone v-peek" data-v="peek"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>الكارت يتهز أول ما يبان</h2>
+    <p class="lead">أول ما السكشن يظهر قدام العميل، الكارت اللي فوق بيتزق شوية يمين وشمال ويكشف اللي تحته، ومعاه جملة صغيرة "Tap or swipe". الحركة دي بتحصل مرة واحدة بس.</p>
+    <div class="phone v-nudge" data-v="nudge"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>صور العملاء تحت الكارت</h2>
+    <p class="lead">تحت الكارت صور صغيرة للعملاء اللي بعتوا، وجنبها "+17 more messages"، وصورة صاحبة الرسالة اللي ظاهرة بتعلى شوية.</p>
+    <div class="phone v-pile" data-v="pile"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>أسهم على الجنبين</h2>
+    <p class="lead">سهم يمين وسهم شمال جنب الكارت بدل زرار Next، زي أي معرض صور، فالناس بتفهم على طول إن فيه حاجة تانية.</p>
+    <div class="phone v-arrows" data-v="arrows"></div>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span>شَرط صغيرة تحت الكارت</h2>
+    <p class="lead">شَرط صغيرة تحت الكارت بدل الأرقام، واللي انت عليها أطول. بتبيّن إن فيه كروت تانية من غير ما يبان رقم.</p>
+    <div class="phone v-dashes" data-v="dashes"></div>
+  </section>
+</main>
+
+<script>
+const IDS = [1, 15, 6, 20, 13, 9, 3, 14, 19, 8, 2, 4, 5, 7, 10, 11, 12, 16, 17, 21];
+const LIGHT = [3], NO_AV = [19];
+const pad = n => String(n).padStart(2, '0');
+const img = n => `../reviews-deck/img/${pad(n)}.jpg`;
+const IG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>';
+
+const REST = {
+  base: d => d < 3 ? `translateY(${d * 10}px) scale(${1 - d * .04}) rotate(${[0, 3, -3][d]}deg)` : 'translateY(20px) scale(.92)',
+  fan: d => d < 4 ? `translateX(${[0, 26, -26, 0][d]}px) translateY(${[0, 12, 18, 26][d]}px) scale(${1 - d * .05}) rotate(${[0, 7, -7, 0][d]}deg)` : 'translateY(26px) scale(.85)',
+  peek: d => d < 3 ? `translateX(${d * 82}%) scale(${1 - d * .06})` : 'translateX(170%) scale(.88)'
+};
+const VIS = { base: 3, fan: 3, peek: 2 };
+
+function build(phone) {
+  const v = phone.dataset.v;
+  const rest = REST[v] || REST.base;
+  const vis = VIS[v] || 3;
+  phone.innerHTML = `<div class="bar"><img src="../reviews/img/logo-navy.png" alt="Loss"></div>
+    <div class="sec"><div class="h">Straight from our DMs</div><div class="sub">Real messages, sent after the order arrived.</div>
+    <div class="deck">${v === 'arrows' ? '<button class="arrow l" aria-label="Previous">‹</button><button class="arrow r" aria-label="Next">›</button>' : ''}${IDS.map(n => `<div class="card${LIGHT.includes(n) ? ' light' : ''}"><div class="head">${IG}</div><div class="shot"><img src="${img(n)}" alt="" draggable="false"></div></div>`).join('')}</div>
+    ${v === 'pile' ? `<div class="pile"><div class="faces">${IDS.slice(0, 3).map(n => `<img src="../reviews-deck/img/av-${pad(n)}.jpg" alt="">`).join('')}</div><small>+${IDS.length - 3} more messages</small></div>` : ''}
+    ${v === 'dashes' ? `<div class="dashes">${IDS.map(() => '<i></i>').join('')}</div>` : ''}
+    ${v !== 'arrows' && v !== 'dashes' && v !== 'pile' ? '<div class="ui"><button class="next">Next</button></div>' : ''}
+    ${v === 'pile' || v === 'dashes' ? '<div class="ui"><button class="next">Next</button></div>' : ''}
+    <div class="hint">Tap for the next message, swipe left to go back.</div></div>
+    ${v === 'nudge' ? '<div class="tip">← Tap or swipe →</div>' : ''}`;
+
+  const deck = phone.querySelector('.deck');
+  const cards = [...deck.querySelectorAll('.card')];
+  let top = 0, busy = false;
+
+  const lay = () => {
+    cards.forEach((c, i) => {
+      const d = (i - top + cards.length) % cards.length;
+      c.style.zIndex = cards.length - d;
+      c.style.transform = rest(d);
+      c.style.opacity = d < vis ? 1 : 0;
+    });
+    if (v === 'pile') {
+      const faces = phone.querySelector('.faces');
+      faces.innerHTML = [0, 1, 2].map(k => { const n = IDS[(top + k) % IDS.length]; return NO_AV.includes(n) ? '<span style="background:#3a3f55"></span>' : `<img src="../reviews-deck/img/av-${pad(n)}.jpg" alt=""${k === 0 ? ' class="on"' : ''}>`; }).join('');
+    }
+    if (v === 'dashes') phone.querySelectorAll('.dashes i').forEach((d, k) => d.classList.toggle('on', k === top));
+  };
+  const fly = side => {
+    if (busy) return; busy = true;
+    const c = cards[top];
+    c.classList.remove('drag');
+    c.style.transform = v === 'peek' ? `translateX(${side > 0 ? -120 : 120}%)` : `translateX(${side * 130}%) rotate(${side * 14}deg)`;
+    c.style.opacity = 0;
+    setTimeout(() => { top = (top + side + cards.length) % cards.length; lay(); busy = false; }, 380);
+  };
+  // In "peek" the strip reads left to right, so next comes from the right: swipe left = next.
+  const dirFromSwipe = dx => v === 'peek' ? (dx < 0 ? 1 : -1) : (dx > 0 ? 1 : -1);
+
+  phone.querySelectorAll('.next, .arrow.r').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); fly(1); }));
+  phone.querySelectorAll('.arrow.l').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); fly(-1); }));
+
+  let sx = null, dx = 0, pid = null;
+  deck.addEventListener('pointerdown', e => { if (busy || e.target.closest('.arrow')) return; sx = e.clientX; dx = 0; pid = e.pointerId; cards[top].classList.add('drag'); deck.setPointerCapture(pid); });
+  deck.addEventListener('pointermove', e => { if (sx === null || e.pointerId !== pid) return; dx = e.clientX - sx; cards[top].style.transform = v === 'peek' ? `translateX(${dx}px)` : `translateX(${dx}px) rotate(${dx / 18}deg)`; });
+  const end = e => {
+    if (sx === null || e.pointerId !== pid) return; sx = null;
+    cards[top].classList.remove('drag');
+    if (Math.abs(dx) > 70) fly(dirFromSwipe(dx));
+    else if (e.type === 'pointerup' && Math.abs(dx) < 6) fly(1);
+    else cards[top].style.transform = rest(0);
+  };
+  deck.addEventListener('pointerup', end);
+  deck.addEventListener('pointercancel', end);
+  lay();
+
+  if (v === 'nudge') {
+    const tip = phone.querySelector('.tip');
+    const nudge = () => {
+      const c = cards[top];
+      const steps = ['translateX(-38px) rotate(-5deg)', 'translateX(30px) rotate(4deg)', rest(0)];
+      tip.classList.add('on');
+      steps.forEach((t, k) => setTimeout(() => { c.style.transform = t; }, 300 + k * 420));
+      setTimeout(() => tip.classList.remove('on'), 3200);
+    };
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { setTimeout(nudge, 400); o.disconnect(); } }, { threshold: .6 }).observe(deck);
+    phone.addEventListener('dblclick', nudge);
+  }
+}
+document.querySelectorAll('[data-v]').forEach(build);
+</script>
+</body>
+</html>
